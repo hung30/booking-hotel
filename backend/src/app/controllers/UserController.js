@@ -20,11 +20,8 @@ class UserController {
   async getUser(req, res) {
     try {
       const token = await req.cookies.token;
-      console.log(token);
       const idUser = await jwt.verify(token, process.env.JWT_KEY);
-      console.log(idUser);
       const user = await User.findById(idUser.id);
-      console.log(user);
 
       if (!user) {
         return res.status(404).json(err);
