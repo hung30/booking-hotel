@@ -23,7 +23,6 @@ class AuthController {
         //save to DB
       });
       const user = await newUser.save();
-      console.log(user);
       res.status(200).json(user);
     } catch (err) {
       return res.status(500).json(err);
