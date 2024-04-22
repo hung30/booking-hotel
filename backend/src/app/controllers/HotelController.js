@@ -1,4 +1,6 @@
+const { query } = require("express");
 const Hotel = require("../models/Hotel");
+const { Query } = require("mongoose");
 
 class HotelController {
   //[POST] /hotel
@@ -11,7 +13,6 @@ class HotelController {
           message: "khong co file anh",
         });
       }
-
       const newImage = {
         src: src,
         alt: req.body.alt,
@@ -27,7 +28,6 @@ class HotelController {
       const isDistrict = await Hotel.findOne({
         district: district,
       });
-
       if (isDistrict) {
         const updatedHotel = await Hotel.findByIdAndUpdate(
           isDistrict.id,
@@ -35,7 +35,10 @@ class HotelController {
           { new: true }
         );
         if (updatedHotel) {
-          return res.status(200).json(updatedHotel);
+          return res.status(200).json({
+            message: "Them khach san thanh cong",
+            updatedHotel,
+          });
         }
       } else {
         const updatedHotel = await new Hotel({
@@ -43,10 +46,13 @@ class HotelController {
           hotels: newHotel,
         });
         const hotel = await updatedHotel.save();
-        return res.status(200).json(hotel);
+        return res.status(200).json({
+          message: "Them khach san thanh cong",
+          hotel,
+        });
       }
     } catch (err) {
-      return res.status(500).json(err);
+      return res.json(err);
     }
   }
 
@@ -60,6 +66,25 @@ class HotelController {
         });
       }
       return res.status(200).json(data);
+    } catch (err) {
+      return res.status(500).json(err);
+    }
+  }
+  // [GET] /get-hotel
+  async getOneHotel(req, res) {
+    try {
+      const nameHotel = await req.body.nameHotel;
+      const regex = new RegExp(nameHotel, "i");
+      const hotel = await Hotel.find({
+        hotels: { $elemMatch: { name: { $regex: regex } } },
+      });
+      if (!hotel) {
+        return res.status(404).json({
+          message: "Khong tim thay khach san nao ca",
+        });
+      }
+      console.log(hotel.hotels);
+      res.status(200).json(hotel.hotels);
     } catch (err) {
       return res.status(500).json(err);
     }
