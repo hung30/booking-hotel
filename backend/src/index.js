@@ -26,6 +26,7 @@ app.use(cookieParser());
 
 // Routes Init
 route(app);
+console.log("hello world")
 
 app.listen(port, () => {
   console.log(`App listening at  http://127.0.0.1:${port}`);
