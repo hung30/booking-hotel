@@ -182,7 +182,6 @@
                         </div>
                     </div>
                 </div>
-                {loading && <div className="loading">Loading...</div>}
             </div>
         );
     }
