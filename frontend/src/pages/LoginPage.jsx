@@ -130,7 +130,7 @@ function LoginPage() {
     return "";
   };
 
-  return (
+return (
     <div>
       <div className="big">
         <div className="container" id="container">
