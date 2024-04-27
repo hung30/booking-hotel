@@ -1,7 +1,6 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const brcypt = require("bcrypt");
-
 class UserController {
   //[GET] /user
 
@@ -40,8 +39,7 @@ class UserController {
     try {
       const salt = await brcypt.genSalt(10);
       const hashed = await brcypt.hash(req.body.password, salt);
-
-      const userId = await req.params.id;
+      const userId = req.params.id;
       const user = await User.findByIdAndUpdate(
         userId,
         {

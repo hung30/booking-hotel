@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.js"
+      integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div>
+      <div>userName: <input type="text" name="userName" id="userName" /></div>
+      <div>
+        passWork:
+        <input type="text" name="passWork" id="passWork" />
+      </div>
+      <button onclick="login()">Đăng nhập</button>
+    </div>
+    <script>
+      function setCookie(cname, cvalue, exdays) {
+        const d = new Date();
+        d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+        let expires = "expires=" + d.toUTCString();
+        let domain = "domain=127.0.0.1";
+        document.cookie =
+          cname + "=" + cvalue + ";" + expires + ";path=/;" + domain;
+      }
+      function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(";");
+        for (let i = 0; i < ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) == " ") {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+      }
+
+      function login() {
+        const username = document.getElementById("userName").value;
+        const password = document.getElementById("passWork").value;
+
+        const data = { username, password };
+        fetch("http://localhost:3000/auth/login", {
+          method: "POST",
+          credentials: "include",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credentials": "true",
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((json) => {
+            if (json.message == "thanh cong") {
+              setCookie("token", json.token, 15);
+              window.location.href = "./index.html";
+            } else {
+              alert("dang nhap that bai");
+              window.location.href = "./dangnhap.html";
+            }
+          });
+        // $.ajax({
+        //   url: "http://127.0.0.1:3000/login",
+        //   type: "POST",
+        //   data: data,
+        // }).then((data) => {
+        //   if (data.message == "thanh cong") {
+        //     setCookie("token", data.token, 15);
+        //     // window.location.href = "./index.html";
+        //   } else {
+        //     alert("dang nhap that bai");
+        //     window.location.href = "./dangnhap.html";
+        //   }
+        // });
+      }
+    </script>
+  </body>
+</html>

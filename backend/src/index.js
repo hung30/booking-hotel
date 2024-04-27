@@ -18,7 +18,7 @@ app.use(morgan("combined"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const corsOptions = {
-  origin: "http://127.0.0.1:5500", // Đổi lại thành địa chỉ của trang web của bạn
+  origin: "http://localhost:5000", // Đổi lại thành địa chỉ của trang web của bạn
   credentials: true, // Cho phép gửi cookie
 };
 app.use(cors(corsOptions));
