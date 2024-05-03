@@ -53,7 +53,7 @@ class AuthController {
       }
       if (user && validPassword) {
         const token = jwt.sign(
-          { id: user._id.toString(), admin: user.admin },
+          { id: user._id.toString(), admin: user.admin, username:user.username },
           process.env.JWT_KEY
         );
         return res.status(200).json({
