@@ -17,7 +17,7 @@ class AuthController {
           message: "Tai khoan da ton tai",
         });
       }
-      const newUser = await new User({
+      const newUser = new User({
         username: req.body.username,
         password: hashed,
         telephone: req.body.telephone,
@@ -53,7 +53,7 @@ class AuthController {
       }
       if (user && validPassword) {
         const token = jwt.sign(
-          { id: user._id.toString(), admin: user.admin },
+          { id: user._id.toString(), admin: user.admin, name:user.username },
           process.env.JWT_KEY
         );
         return res.status(200).json({
