@@ -1,6 +1,6 @@
 .header {
     margin-bottom:20px;
-    background-color: #007bff;
+    background-color: #0d37b4;
     color: #fff;
     padding: 20px;
     display: flex;
@@ -21,7 +21,7 @@
 
 .logo p {
     margin: 5px 0;
-    font-size: 14px;
+    font-size: 20px;
 }
 
 .nav {
@@ -39,12 +39,20 @@
 }
 
 .nav li {
+  
     margin-right: 20px;
+    padding: 15px;
+}
+
+.nav li :hover{
+    text-decoration:underline; 
+    color:white;
 }
 
 .nav a {
     color: #fff;
     text-decoration: none;
+    font-size: 15px;
 }
 
 .user {
@@ -54,4 +62,12 @@
 
 .user p {
     margin: 0;
+}
+
+button{
+    padding: 10px;
+    border: none;
+    margin-right: 10px;
+    background-color: rgb(40, 91, 231);
+    color: white;
 }

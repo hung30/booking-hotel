@@ -18,7 +18,7 @@ function AdminPage() {
     const [file, setFile] = React.useState(null);
     const [createForm] = Form.useForm();
     const [updateForm] = Form.useForm();
-const API_URL='http://localhost:3000'
+    const API_URL='http://localhost:3000'
     const handleLogout = () => {
         document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         navigate("/login")
@@ -89,7 +89,7 @@ const API_URL='http://localhost:3000'
             },
         },
         {
-            title: 'Tên sản phẩm',
+            title: 'Tên khách sạn',
             dataIndex: 'name',
             key: 'name',
             render: (text) => {
@@ -102,40 +102,6 @@ const API_URL='http://localhost:3000'
             key: 'price',
             render: (text) => {
                 return <span>{numeral(text).format('0,0')}VND</span>;
-            },
-        },
-        {
-            title: 'Giảm',
-            dataIndex: 'discount',
-            key: 'discount',
-            render: (text) => {
-                return <span>{numeral(text).format('0,0')}%</span>;
-            },
-        },
-        {
-            title: 'Tồn kho',
-            dataIndex: 'stock',
-            key: 'stock',
-            render: (text) => {
-                return <span>{text}</span>;
-            },
-        },
-        {
-            title: 'Bộ nhớ',
-            key: 'memory',
-            dataIndex: 'memory',
-            width: '10%',
-            render: (text) => {
-                return <div style={{ textAlign: 'right' }}> {text}</div>;
-            },
-        },
-        {
-            title: 'Màu',
-            key: 'color',
-            dataIndex: 'color',
-            width: '10%',
-            render: (text) => {
-                return <div style={{ textAlign: 'right' }}> {text}</div>;
             },
         },
         {
@@ -293,27 +259,14 @@ const API_URL='http://localhost:3000'
                     />
                 </Form.Item>
 
-                <Form.Item label='Tên sản phẩm' name='name' rules={[{ required: true, message: 'Chưa nhập Tên sản phẩm' }]} hasFeedback>
+                <Form.Item label='Tên khách sạn' name='name' rules={[{ required: true, message: 'Chưa nhập Tên khách sạn' }]} hasFeedback>
                     <Input  style={{ width: 300 }}/>
                 </Form.Item>
 
-                <Form.Item label='Giá bán' name='price' rules={[{ required: true, message: 'Chưa nhập Giá bán' }]} hasFeedback>
+                <Form.Item label='Giá' name='price' rules={[{ required: true, message: 'Chưa nhập giá' }]} hasFeedback>
                     <InputNumber
                         style={{ minWidth: 200 }}
                     />
-                </Form.Item>
-
-                <Form.Item label='Giảm giá' name='discount'>
-                    <InputNumber style={{ minWidth: 100 }} />
-                </Form.Item>
-                <Form.Item label='Tồn kho' name='stock'>
-                    <InputNumber style={{ minWidth: 100}} />
-                </Form.Item>
-                <Form.Item label='Bộ nhớ' name='memory'>
-                    <Input style={{width:'100px'}} />
-                </Form.Item>
-                <Form.Item label='Màu' name='color'>
-                    <Input style={{width:'200px'}}/>
                 </Form.Item>
                 <Form.Item label='Hình minh họa' name='file'>
                     <Upload
@@ -362,25 +315,12 @@ const API_URL='http://localhost:3000'
                         />
                     </Form.Item>
 
-                    <Form.Item label='Tên sản phẩm' name='name' rules={[{ required: true, message: 'Chưa nhập Tên sản phẩm' }]} hasFeedback>
+                    <Form.Item label='Tên khách sạn' name='name' rules={[{ required: true, message: 'Chưa nhập Tên khách sạn' }]} hasFeedback>
                         <Input />
                     </Form.Item>
 
-                    <Form.Item label='Giá bán' name='price' rules={[{ required: true, message: 'Chưa nhập Giá bán' }]} hasFeedback>
+                    <Form.Item label='Giá' name='price' rules={[{ required: true, message: 'Chưa nhập giá' }]} hasFeedback>
                         <InputNumber style={{ minWidth: 300 }} />
-                    </Form.Item>
-
-                    <Form.Item label='Giảm giá' name='discount'>
-                        <InputNumber />
-                    </Form.Item>
-                    <Form.Item label='Tồn kho' name='stock'>
-                        <InputNumber />
-                    </Form.Item>
-                    <Form.Item label='Bộ nhớ' name='memory'>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item label='Màu' name='color'>
-                        <Input />
                     </Form.Item>
                 </Form>
             </Modal>
