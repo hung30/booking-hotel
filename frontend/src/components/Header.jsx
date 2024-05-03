@@ -46,14 +46,14 @@ function Header() {
             </div>
             <nav className="nav">
                 <ul>
-                    <li><a href="/">Trang chủ</a></li>
-                    <li><a href="/khach-san">Khách sạn</a></li>
-                    <li><a href="/ca-nhan">Cá nhân</a></li>
-                    <li><a href="/tin-tuc">Tin tức</a></li>
-                    <li><a href="/lien-he">Liên hệ</a></li>
+                    <li><a href="/">TRANG CHỦ</a></li>
+                    <li><a href="/khach-san">KHÁCH SẠN</a></li>
+                    <li><a href="/ca-nhan">CÁ NHÂN</a></li>
+                    <li><a href="/tin-tuc">TIN TỨC</a></li>
+                    <li><a href="/lien-he">LIÊN HỆ</a></li>
                     {decoded.admin === true ? (
                         <li>
-                            <a href="/admin">Admin</a>
+                            <a href="/admin">ADMIN</a>
                         </li>
                     ) : null}
                 </ul>
