@@ -44,5 +44,8 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://booking-hotel-s5np.onrender.com"
+  "proxy": "https://booking-hotel-s5np.onrender.com",
+  "devDependencies": {
+    "tailwindcss": "^3.4.3"
+  }
 }
