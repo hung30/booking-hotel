@@ -3,14 +3,13 @@ import {useNavigate} from "react-router-dom";
 import { Image, Table, Button, Popconfirm, Form, Input, message, Space, Modal, InputNumber, Select, Upload } from 'antd';
 import { DeleteOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons';
 import axios from "axios";
-// import moment from 'moment';
-import numeral from 'numeral';
 
+import numeral from 'numeral';
 function AdminPage() {
     const navigate = useNavigate();
     const [isPreview, setIsPreview] = React.useState(false);
     const [categories, setCategories] = React.useState([]);
-    const [products, setProducts] = React.useState([]);
+    const [hotels, setHotel] = React.useState([]);
     const [selectedRecord, setSelectedRecord] = React.useState(null);
     const [refresh, setRefresh] = React.useState(0);
     const [editFormVisible, setEditFormVisible] = React.useState(false);
@@ -33,11 +32,18 @@ function AdminPage() {
         }
     }, [navigate]);
 
+    useEffect(() => {
+        axios.get('/hotel').then((response) => {
+          setHotel(response.data);
+          // console.log(response.data);
+        });
+      }, [refresh]);
+
     const columns = [
         {
             title: 'Hình ảnh',
-            key: 'imageUrl',
-            dataIndex: 'imageUrl',
+            key: 'image',
+            dataIndex: 'image',
             width: '1%',
             render: (text, record) => {
                 return (
@@ -53,7 +59,7 @@ function AdminPage() {
                                         visible: false,
                                     }}
                                     width={60}
-                                    src={`${API_URL}${text}`}
+                                    src={text.src}
                                 />
                                 <div
                                     style={{
@@ -66,11 +72,11 @@ function AdminPage() {
                                             onVisibleChange: (vis) => setIsPreview(vis),
                                         }}
                                     >
-                                        <Image src={`${API_URL}${text}`} />
+                                        <Image src={text.src} />
                                         {record &&
                                             record.images &&
                                             record.images.map((image) => {
-                                                return <Image key={image} src={`${API_URL}${image}`} />;
+                                                return <Image key={image} src={text.src} />;
                                             })}
                                     </Image.PreviewGroup>
                                 </div>
@@ -81,27 +87,35 @@ function AdminPage() {
             },
         },
         {
-            title: 'Danh mục',
-            dataIndex: 'category',
-            key: 'category',
+            title: 'Khu vực',
+            dataIndex: 'district',
+            key: 'district',
             render: (text, record) => {
-                return <strong>{record?.category?.name}</strong>;
+                return <strong>{record?.district?.name}</strong>;
             },
         },
         {
             title: 'Tên khách sạn',
-            dataIndex: 'name',
-            key: 'name',
+            dataIndex: 'nameHotel',
+            key: 'nameHotel',
             render: (text) => {
                 return <strong>{text}</strong>;
             },
         },
         {
-            title: 'Giá',
-            dataIndex: 'price',
-            key: 'price',
+            title: 'Thông tin mô tả',
+            dataIndex: 'description',
+            key: 'description',
             render: (text) => {
-                return <span>{numeral(text).format('0,0')}VND</span>;
+                return <strong>{text}</strong>;
+            },
+        },
+        {
+            title: 'Khoảng cách đến trung tâm',
+            dataIndex: 'distanceFormCenter',
+            key: 'distanceFormCenter',
+            render: (text) => {
+                return <strong>{text}</strong>;
             },
         },
         {
@@ -137,7 +151,7 @@ function AdminPage() {
                             onConfirm={() => {
                                 const id = record._id;
                                 axios
-                                    .delete('/product/' + id)
+                                    .delete('/hotel/delete-hotel/' + id)
                                     .then((response) => {
                                         message.success('Xóa thành công!');
                                         setRefresh((f) => f + 1);
@@ -168,7 +182,7 @@ function AdminPage() {
                         <Upload
                             showUploadList={false}
                             name='file'
-                            action={API_URL + '/upload/products/' + record._id}
+                            action={API_URL + '/upload/hotels/' + record._id}
                             headers={{ authorization: 'authorization-text' }}
                             onChange={(info) => {
                                 if (info.file.status !== 'uploading') {
@@ -202,7 +216,7 @@ function AdminPage() {
                 formData.append('file', file);
 //POST ẢNH
                 axios
-                    .post(API_URL + '/upload/products/' + _id, formData)
+                    .post(API_URL + '/upload/hotels/' + _id, formData)
                     .then((respose) => {
                         message.success('Thêm mới thành công!');
                         createForm.resetFields();
@@ -239,14 +253,29 @@ function AdminPage() {
     };
 
 
+    
 
     return (
         <div>
             {/* FROM INPUT SẢN PHẨM */}
             <Form form={createForm} name='create-form' labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} initialValues={{ remember: true }} onFinish={onFinish} onFinishFailed={onFinishFailed} autoComplete='on'>
-                <Form.Item label='Danh mục sản phẩm' name='categoryId' rules={[{ required: true, message: 'Chưa nhập Tên sản phẩm' }]} hasFeedback >
+                <Form.Item label='Phòng' name='categoryId' rules={[{ required: true, message: 'Chưa nhập Tên sản phẩm' }]} hasFeedback >
                     <Select
-                        style={{width:300}}
+                        style={{width:200}}
+                        options={
+                            categories &&
+                            categories.map((c) => {
+                                return {
+                                    value: c._id,
+                                    label: c.name,
+                                };
+                            })
+                        }
+                    />
+                </Form.Item>
+                <Form.Item label='Khu vực' name='categoryId' rules={[{ required: true, message: 'Chưa chọn khu vực' }]} hasFeedback >
+                    <Select
+                        style={{width:200}}
                         options={
                             categories &&
                             categories.map((c) => {
@@ -259,15 +288,22 @@ function AdminPage() {
                     />
                 </Form.Item>
 
+                <Form.Item label='Khu vực' name='districst' rules={[{ required: true, message: 'Chưa nhập khu vực' }]} hasFeedback>
+                    <Input  style={{ width: 300 }}/>
+                </Form.Item>
+
                 <Form.Item label='Tên khách sạn' name='name' rules={[{ required: true, message: 'Chưa nhập Tên khách sạn' }]} hasFeedback>
                     <Input  style={{ width: 300 }}/>
                 </Form.Item>
 
-                <Form.Item label='Giá' name='price' rules={[{ required: true, message: 'Chưa nhập giá' }]} hasFeedback>
-                    <InputNumber
-                        style={{ minWidth: 200 }}
-                    />
+                <Form.Item label='Thông tin mô tả' name='description' rules={[{ required: true, message: 'Chưa nhập mô tả' }]} hasFeedback>
+                    <Input  style={{ width: 300 }}/>
                 </Form.Item>
+
+                <Form.Item label='Khoảnh cách đến trung tâm' name='distanceFormCenter' rules={[{ required: true, message: 'Chưa khoảng cách' }]} hasFeedback>
+                    <Input  style={{ width: 300,marginLeft:50 }}/>
+                </Form.Item>
+
                 <Form.Item label='Hình minh họa' name='file'>
                     <Upload
                         showUploadList={true}
@@ -285,7 +321,7 @@ function AdminPage() {
                     </Button>
                 </Form.Item>
             </Form>
-            <Table rowKey='_id' dataSource={products} columns={columns} pagination={false} />
+            <Table rowKey='_id' dataSource={hotels} columns={columns} pagination={false} />
             <Modal
                 centered
                 open={editFormVisible}
@@ -300,9 +336,10 @@ function AdminPage() {
                 cancelText='Đóng'
             >
                 {/* FORM UPDATE SẢN PHẨM */}
-                <Form form={updateForm} name='update-form' labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} initialValues={{ remember: true }} onFinish={onUpdateFinish} onFinishFailed={onUpdateFinishFailed} autoComplete='on'>
-                    <Form.Item label='Danh mục sản phẩm' name='categoryId' rules={[{ required: true, message: 'Chưa nhập Tên sản phẩm' }]} hasFeedback>
-                        <Select
+                <Form form={updateForm} name='update-form' labelCol={{ span: 8 }} wrapperCol={{ span: 26 }} initialValues={{ remember: true }} onFinish={onUpdateFinish} onFinishFailed={onUpdateFinishFailed} autoComplete='on'>
+                    <Form.Item label='Phòng' name='categoryId' rules={[{ required: true, message: 'Chưa chọn phòng' }]} hasFeedback>
+                        <Select 
+                       style={{marginRight:70}}
                             options={
                                 categories &&
                                 categories.map((c) => {
@@ -315,12 +352,31 @@ function AdminPage() {
                         />
                     </Form.Item>
 
-                    <Form.Item label='Tên khách sạn' name='name' rules={[{ required: true, message: 'Chưa nhập Tên khách sạn' }]} hasFeedback>
-                        <Input />
+                    <Form.Item label='Khu vực' name='categoryId' rules={[{ required: true, message: 'Chưa chọn khu vực' }]} hasFeedback >
+                    <Select
+                        style={{width:200}}
+                        options={
+                            categories &&
+                            categories.map((c) => {
+                                return {
+                                    value: c._id,
+                                    label: c.name,
+                                };
+                            })
+                        }
+                    />
                     </Form.Item>
 
-                    <Form.Item label='Giá' name='price' rules={[{ required: true, message: 'Chưa nhập giá' }]} hasFeedback>
-                        <InputNumber style={{ minWidth: 300 }} />
+                    <Form.Item label='Tên khách sạn' name='name' rules={[{ required: true, message: 'Chưa nhập Tên khách sạn' }]} hasFeedback>
+                        <Input  style={{ width: 300 }}/>
+                    </Form.Item>
+
+                    <Form.Item label='Thông tin mô tả' name='description' rules={[{ required: true, message: 'Chưa chỉnh mô tả' }]} hasFeedback>
+                        <Input  style={{ width: 300 }}/>
+                    </Form.Item>
+
+                    <Form.Item label='Khoảnh cách' name='distanceFormCenter' rules={[{ required: true, message: 'Chưa chỉnh khoảng cách' }]} hasFeedback>
+                        <Input  style={{ width: 300}}/>
                     </Form.Item>
                 </Form>
             </Modal>
