@@ -1,5 +1,19 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.search {
+  height: 200px;
+  background-color: aliceblue;
+}
+
+.search-box {
+  padding-top: 20px;
+}
+
+.search p {
+  font-size: 14px;
+  text-align: center;
 }

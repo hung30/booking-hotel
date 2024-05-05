@@ -10,7 +10,7 @@ class HotelController {
   //[POST] /hotel/new-hotel
   async addHotel(req, res) {
     try {
-      const src = req.file.path;
+      const src = await req.file.path;
       if (!src) {
         return res.json({
           message: "khong co file anh",
@@ -21,38 +21,19 @@ class HotelController {
         alt: req.body.alt,
       };
 
-      const district = convertToLowerCase(req.body.district);
-      const isDistrict = await District.findOne({
-        name: district,
-      });
+      const isDistrict = await District.findById(req.body.district);
       if (!isDistrict) {
         return res.status(404).json({
           message: `Khong co quan nao ten ${district}`,
         });
       }
-      const room = req.body.room;
-      const regex = new RegExp(room, "i");
-      const rooms = await Room.find({
-        name: regex,
-      });
+      const rooms = await Room.findById(req.body.room);
       if (rooms.length === 0) {
         return res.status(404).json({
           message: `Khong tim thay phong nao co ten ${room}`,
         });
       }
 
-      //Check xem phòng có giá ứng với quận đó không
-      var newRoom;
-      rooms.forEach((room) => {
-        if (room.district.toString() === isDistrict.id) {
-          newRoom = room;
-        }
-      });
-      if (!newRoom) {
-        res.status(404).json({
-          message: `khong tim thay gia phong khach san o quan ${isDistrict.name}`,
-        });
-      }
       const newHotel = await new Hotel({
         nameHotel: req.body.nameHotel,
         description: req.body.description,
@@ -60,7 +41,7 @@ class HotelController {
         image: newImage,
         evaluate: req.body.evaluate,
         district: isDistrict.id,
-        room: newRoom._id,
+        room: rooms._id,
       });
 
       const hotel = await newHotel.save();
@@ -76,13 +57,10 @@ class HotelController {
   // [POST] /hotel/new-room
   async newRoom(req, res) {
     try {
-      const districtName = convertToLowerCase(req.body.district);
-      const district = await District.findOne({
-        name: districtName,
-      });
+      const district = await District.findById(req.body.district);
       if (!district) {
         return res.status(404).json({
-          message: `Khong tim thay quan ban nhap: ${districtName}`,
+          message: `Khong tim thay quan`,
         });
       }
       const newRoom = await new Room({
@@ -111,31 +89,20 @@ class HotelController {
   //[PUT] /hotel/add-room-hotel thêm phòng cho khách sạn
   async addRoomHotel(req, res) {
     try {
-      const hotelName = req.body.hotelName;
-      const regex = new RegExp(hotelName, "i");
-      const hotelId = await Hotel.findOne({ nameHotel: regex });
+      const hotelId = await Hotel.findById(req.body.hotel);
       if (!hotelId) {
         return res.status(404).json({
           message: "Khong tim thay khach san",
         });
       }
-      const districtName = req.body.districtName;
-      const districtRegex = new RegExp(districtName, "i");
-      const district = await District.findOne({
-        name: districtRegex,
-      });
+      const district = await District.findById(req.body.district);
       if (!district) {
         return res.status(404).json({
           message: "Khong tim thay quan",
         });
       }
-      const roomName = req.body.roomName;
-      const roomRegex = new RegExp(roomName, "i");
 
-      const roomId = await Room.findOne({
-        name: roomRegex,
-        district: district._id,
-      });
+      const roomId = await Room.findById(req.body.room);
 
       if (!roomId) {
         return res.status(404).json({
@@ -334,6 +301,39 @@ class HotelController {
       }
       return res.status(200).json(hotel);
     } catch (err) {
+      return res.status(500).json(err);
+    }
+  }
+
+  //[GET] /hotel/room
+  async getRoom(req, res) {
+    try {
+      const data = await Room.find({ district: req.body.district }).populate(
+        "district"
+      );
+      if (!data.length) {
+        return res.status(404).json({
+          message: "Khong thay phong nao ca",
+        });
+      }
+      return res.status(200).json(data);
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json(err);
+    }
+  }
+  //[GET] /hotel/district
+  async getDistrict(req, res) {
+    try {
+      const data = await District.find();
+      if (!data.length) {
+        return res.status(404).json({
+          message: "Khong thay quan nao ca",
+        });
+      }
+      return res.status(200).json(data);
+    } catch (err) {
+      console.error(err);
       return res.status(500).json(err);
     }
   }

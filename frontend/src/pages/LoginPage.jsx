@@ -3,6 +3,8 @@ import "../css_class/LoginPage.css";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import { Box, Button, IconButton, Snackbar } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 function LoginPage() {
   const [username, setUsername] = useState("");
@@ -12,6 +14,8 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
 
   const handleSignUpClick = () => {
@@ -25,22 +29,22 @@ function LoginPage() {
   };
 
   const handleLogin = async (e) => {
-    let accessToken;
+    let token;
     e.preventDefault();
     setLoading(true);
     try {
       console.log(username, password);
-      const response = await axios.post("http://localhost:3000/auth/login", {
+      const response = await axios.post("/auth/login", {
         username: username,
         password: password,
       });
       if (response) {
-        accessToken = response.data.token;
+        token = response.data.token;
       } else {
         throw new Error("Invalid response from server");
       }
-      const decoded = jwtDecode(accessToken);
-      document.cookie = `accessToken=${accessToken}; path=/`;
+      const decoded = jwtDecode(token);
+      document.cookie = `token=${token}; path=/`;
       if (decoded.admin === true || decoded.admin === false) {
         setTimeout(() => {
           setLoading(false);
@@ -54,17 +58,20 @@ function LoginPage() {
     } catch (err) {
       console.log(err);
       console.error("Error during login:", err);
-      alert("Đăng nhập không thành công. Vui lòng thử lại sau.");
+      console.log(message);
+      // window.alert("Tài khoản hoặc mật khẩu không đúng");
+      setOpen(true);
+      setMessage("Tài khoản hoặc mật khẩu không đúng");
     }
   };
 
   useEffect(() => {
-    const accessToken = document.cookie
+    const token = document.cookie
       .split("; ")
-      .find((row) => row.startsWith("accessToken="))
+      .find((row) => row.startsWith("token="))
       ?.split("=")[1];
-    if (accessToken) {
-      const decoded = jwtDecode(accessToken);
+    if (token) {
+      const decoded = jwtDecode(token);
       if (decoded.admin === true || decoded.admin === false) {
         navigate("/");
       } else {
@@ -90,7 +97,7 @@ function LoginPage() {
         return;
       }
 
-      const response = await axios.post("http://localhost:3000/auth/register", {
+      const response = await axios.post("/auth/register", {
         username: usernameSignUp,
         password: passwordSignUp,
         email: email,
@@ -129,8 +136,26 @@ function LoginPage() {
     }
     return "";
   };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const action = (
+    <React.Fragment>
+      <Button color="secondary" size="small" onClick={handleClose}>
+        Ẩn
+      </Button>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
-return (
+  return (
     <div>
       <div className="big">
         <div className="container" id="container">
@@ -189,9 +214,34 @@ return (
                 onChange={(e) => setPassword(e.target.value)}
               />
               <a href="#">Forgot your password?</a>
-              <button className="tag_button" onClick={handleSignInClick}>
-                Sign In
-              </button>
+              {message ? (
+                <>
+                  <p
+                    style={{
+                      color: "red",
+                      fontSize: 14,
+                      margin: "0 0 20px",
+                    }}
+                  >
+                    {message}
+                  </p>
+                  <Box>
+                    <button className="tag_button" onClick={handleSignInClick}>
+                      Sign In
+                    </button>
+                    <Snackbar
+                      open={open}
+                      message={message}
+                      action={action}
+                      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                    />
+                  </Box>
+                </>
+              ) : (
+                <button className="tag_button" onClick={handleSignInClick}>
+                  Sign In
+                </button>
+              )}
             </form>
           </div>
           <div className="overlay-container">
@@ -201,6 +251,7 @@ return (
                 <p>
                   To keep connected with us please login with your personal info
                 </p>
+
                 <button
                   className="ghost"
                   id="signIn"
