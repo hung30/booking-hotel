@@ -11,6 +11,13 @@ router.get(
   bookingController.getAllBookingHotel
 );
 
+router.get(
+  "/status",
+  middleWareController.isLogin,
+  middleWareController.isAdmin,
+  bookingController.getStatus
+);
+
 router.post("/:id", middleWareController.isLogin, bookingController.booking);
 
 router.delete(
@@ -20,7 +27,7 @@ router.delete(
 );
 
 router.get(
-  "/",
+  "/:id",
   middleWareController.isLogin,
   bookingController.getBookingFromUserId
 );

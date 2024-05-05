@@ -5,14 +5,13 @@ import { jwtDecode } from "jwt-decode";
 import Button from "@mui/material/Button";
 
 function Header() {
-  const [accessToken, setAccessToken] = useState("");
+  const [token, setToken] = useState("");
   const [decoded, setDecoded] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    document.cookie =
-      "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     setTimeout(() => {
       setLoading(false);
       navigate("/login");
@@ -21,24 +20,24 @@ function Header() {
   };
 
   useEffect(() => {
-    const accessTokenCookie = document.cookie
+    const tokenCookie = document.cookie
       .split("; ")
-      .find((row) => row.startsWith("accessToken="))
+      .find((row) => row.startsWith("token="))
       ?.split("=")[1];
-    if (!accessTokenCookie) {
+    if (!tokenCookie) {
       navigate("/login");
     } else {
-      setAccessToken(accessTokenCookie);
+      setToken(tokenCookie);
     }
   }, [navigate]);
 
   useEffect(() => {
-    if (accessToken) {
-      const decodedToken = jwtDecode(accessToken);
+    if (token) {
+      const decodedToken = jwtDecode(token);
       setDecoded(decodedToken);
       console.log(decodedToken.admin);
     }
-  }, [accessToken, navigate]);
+  }, [token, navigate]);
 
   return (
     <header className="header">
