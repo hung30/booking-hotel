@@ -5,14 +5,13 @@ import { jwtDecode } from "jwt-decode";
 import Button from "@mui/material/Button";
 
 function Header() {
-  const [accessToken, setAccessToken] = useState("");
+  const [token, setToken] = useState("");
   const [decoded, setDecoded] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    document.cookie =
-      "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     setTimeout(() => {
       setLoading(false);
       navigate("/login");
@@ -21,24 +20,24 @@ function Header() {
   };
 
   useEffect(() => {
-    const accessTokenCookie = document.cookie
+    const tokenCookie = document.cookie
       .split("; ")
-      .find((row) => row.startsWith("accessToken="))
+      .find((row) => row.startsWith("token="))
       ?.split("=")[1];
-    if (!accessTokenCookie) {
+    if (!tokenCookie) {
       navigate("/login");
     } else {
-      setAccessToken(accessTokenCookie);
+      setToken(tokenCookie);
     }
   }, [navigate]);
 
   useEffect(() => {
-    if (accessToken) {
-      const decodedToken = jwtDecode(accessToken);
+    if (token) {
+      const decodedToken = jwtDecode(token);
       setDecoded(decodedToken);
       console.log(decodedToken.admin);
     }
-  }, [accessToken, navigate]);
+  }, [token, navigate]);
 
   return (
     <header className="header">
@@ -49,23 +48,23 @@ function Header() {
       <nav className="nav">
         <ul>
           <li>
-            <a href="/">Trang chủ</a>
+            <a href="/">TRANG CHỦ</a>
           </li>
           <li>
-            <a href="/khach-san">Khách sạn</a>
+            <a href="/khach-san">KHÁCH SẠN</a>
           </li>
           <li>
-            <a href="/ca-nhan">Cá nhân</a>
+            <a href="/ca-nhan">CÁ NHÂN</a>
           </li>
           <li>
-            <a href="/tin-tuc">Tin tức</a>
+            <a href="/tin-tuc">TIN TỨC</a>
           </li>
           <li>
-            <a href="/lien-he">Liên hệ</a>
+            <a href="/lien-he">LIÊN HỆ</a>
           </li>
           {decoded.admin === true ? (
             <li>
-              <a href="/admin">Admin</a>
+              <a href="/admin">ADMIN</a>
             </li>
           ) : null}
         </ul>
@@ -74,7 +73,7 @@ function Header() {
         {decoded.admin === true || decoded.admin === false ? (
           <div>
             <span>Chào {decoded.username}.</span>
-            <Button variant="text" color="secondary" onClick={handleLogout}>
+            <Button variant="text" style={{padding: 10,border: 'none', marginRight: 10,backgroundColor: 'rgb(66, 135, 232)', color:'white'}} onClick={handleLogout}>
               Đăng xuất
             </Button>
           </div>

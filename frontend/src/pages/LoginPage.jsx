@@ -29,7 +29,7 @@ function LoginPage() {
   };
 
   const handleLogin = async (e) => {
-    let accessToken;
+    let token;
     e.preventDefault();
     setLoading(true);
     try {
@@ -39,12 +39,12 @@ function LoginPage() {
         password: password,
       });
       if (response) {
-        accessToken = response.data.token;
+        token = response.data.token;
       } else {
         throw new Error("Invalid response from server");
       }
-      const decoded = jwtDecode(accessToken);
-      document.cookie = `accessToken=${accessToken}; path=/`;
+      const decoded = jwtDecode(token);
+      document.cookie = `token=${token}; path=/`;
       if (decoded.admin === true || decoded.admin === false) {
         setTimeout(() => {
           setLoading(false);
@@ -66,12 +66,12 @@ function LoginPage() {
   };
 
   useEffect(() => {
-    const accessToken = document.cookie
+    const token = document.cookie
       .split("; ")
-      .find((row) => row.startsWith("accessToken="))
+      .find((row) => row.startsWith("token="))
       ?.split("=")[1];
-    if (accessToken) {
-      const decoded = jwtDecode(accessToken);
+    if (token) {
+      const decoded = jwtDecode(token);
       if (decoded.admin === true || decoded.admin === false) {
         navigate("/");
       } else {
@@ -213,7 +213,6 @@ function LoginPage() {
                 value={password || ""}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <a href="#">Forgot your password?</a>
               {message ? (
                 <>
                   <p
@@ -230,11 +229,10 @@ function LoginPage() {
                       Sign In
                     </button>
                     <Snackbar
-                      anchorOrigin={{ vertical: "top", horizontal: "right" }}
                       open={open}
                       message={message}
                       action={action}
-                      autoHideDuration={5000}
+                      anchorOrigin={{ vertical: "top", horizontal: "right" }}
                     />
                   </Box>
                 </>
