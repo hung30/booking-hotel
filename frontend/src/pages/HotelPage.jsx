@@ -4,6 +4,7 @@ import { HotelContext } from "../contexts/HotelContext";
 import { useLocation } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
+import { message } from "antd";
 
 export default function HotelPage() {
   const { hotels } = useContext(HotelContext);
@@ -44,7 +45,7 @@ export default function HotelPage() {
     try {
       const res = await axios.post(`/booking/${hotel._id}`, data);
       setHideForm(true);
-      alert("Đặt phòng thành công");
+      message.success("Đặt phòng khách sạn thành công!");
     } catch (error) {
       console.error("Error fetching hotel data:", error);
       return null;
