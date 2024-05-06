@@ -193,7 +193,11 @@ export default function HotelPage() {
             >
               <option value="">--Chọn--</option>
               {hotel?.room?.map((item) => {
-                return <option value={item._id}>{item.name}</option>;
+                return (
+                  <option key={item._id} value={item._id}>
+                    {item.name}
+                  </option>
+                );
               })}
             </select>
           </div>
