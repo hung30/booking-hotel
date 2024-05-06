@@ -33,7 +33,6 @@ function LoginPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      console.log(username, password);
       const response = await axios.post("/auth/login", {
         username: username,
         password: password,

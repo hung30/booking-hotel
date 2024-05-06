@@ -1,12 +1,34 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "../css_class/HomePage.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { HotelContext } from "../contexts/HotelContext";
 
 function HomePage() {
+  const { districts } = useContext(HotelContext);
   const navigate = useNavigate();
-  const searchHandle = () => {
-    navigate("/khach-san");
+  const [district, setDistrict] = useState("");
+  const [err, setErr] = useState(false);
+
+  const searchHandle = async () => {
+    try {
+      const res = await axios.get(`/hotel/get-by-district/${district}`);
+      navigate("/khach-san", { state: { districtHotels: res.data } });
+    } catch (error) {
+      console.error("Error fetching hotel data:", error);
+      setErr(true);
+      return null;
+    }
   };
+  useEffect(() => {
+    if (err) {
+      const timeoutId = setTimeout(() => {
+        setErr(false);
+      }, 2000);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [err]);
   return (
     <div>
       <div className="search">
@@ -17,14 +39,39 @@ function HomePage() {
           <p>Đặt khách sạn quanh khu vực Đà Nẵng</p>
         </div>
         <div className="search-input px-96 text-center">
-          <input
-            type="text"
-            placeholder="Nhập tên quận"
-            className="rounded-md"
-          />
-          <button className="rounded-md" onClick={searchHandle}>
-            Tìm kiếm
-          </button>
+          <select
+            onChange={(e) => setDistrict(e.target.value)}
+            className="w-full h-10 rounded-md mb-3"
+          >
+            <option>- Chọn quận bạn muốn thuê Hotel -</option>
+            {districts.length !== 0 ? (
+              districts.map((district) => {
+                return (
+                  <option key={district._id} value={district._id}>
+                    {district.name}
+                  </option>
+                );
+              })
+            ) : (
+              <option key={district._id} value="">
+                no
+              </option>
+            )}
+          </select>
+          {err ? (
+            <>
+              <p className="text-red-600 text-base mb-1">
+                Chưa có khách sạn nào ở đây
+              </p>
+              <button className="rounded-md" onClick={searchHandle}>
+                Tìm kiếm
+              </button>
+            </>
+          ) : (
+            <button className="rounded-md" onClick={searchHandle}>
+              Tìm kiếm
+            </button>
+          )}
         </div>
       </div>
       <div className="px-72 pt-4">

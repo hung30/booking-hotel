@@ -42,20 +42,15 @@ router.post(
   HotelController.newRoom
 );
 
-router.get("/get-by-district", HotelController.getHotelByDistrictName);
-router.get("/get-one-hotel", HotelController.getOneHotel);
+router.get("/get-by-district/:id", HotelController.getHotelByDistrictName);
+router.get("/get-one-hotel/:id", HotelController.getOneHotel);
 router.get(
-  "/room-from-district",
+  "/room-from-district/:id",
   middleWareController.isLogin,
   middleWareController.isAdmin,
   HotelController.getRoom
 );
-router.get(
-  "/district",
-  middleWareController.isLogin,
-  middleWareController.isAdmin,
-  HotelController.getDistrict
-);
+router.get("/district", HotelController.getDistrict);
 router.get("/", HotelController.getHotel);
 
 module.exports = router;

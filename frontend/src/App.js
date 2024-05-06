@@ -11,6 +11,7 @@ import axios from "axios";
 
 function App() {
   const [hotels, setHotels] = useState([]);
+  const [districts, setDistricts] = useState([]);
   useEffect(() => {
     async function getHotel() {
       try {
@@ -23,12 +24,11 @@ function App() {
     }
     getHotel().then((res) => {
       setHotels(res.data);
-      console.log(res.data);
     });
 
     async function getDistrict() {
       try {
-        const res = await axios.get("/auth/muahang");
+        const res = await axios.get("/hotel/district");
         return res;
       } catch (error) {
         console.error("Error fetching hotel data:", error);
@@ -36,16 +36,12 @@ function App() {
       }
     }
     getDistrict().then((res) => {
-      // setHotels(res.data);
-      console.log(res.data);
-    });
-    getDistrict().catch((err) => {
-      console.log(err);
+      setDistricts(res.data);
     });
   }, []);
   return (
     <div className="App">
-      <HotelContext.Provider value={{ hotels }}>
+      <HotelContext.Provider value={{ hotels, districts }}>
         <BrowserRouter>
           <Header />
           <Routes>

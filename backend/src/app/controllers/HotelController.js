@@ -1,6 +1,9 @@
 const Hotel = require("../models/Hotel");
 const District = require("../models/District");
 const Room = require("../models/Room");
+const {
+  Types: { ObjectId },
+} = require("mongoose");
 
 function convertToLowerCase(str) {
   return str.toLowerCase();
@@ -24,13 +27,19 @@ class HotelController {
       const isDistrict = await District.findById(req.body.district);
       if (!isDistrict) {
         return res.status(404).json({
-          message: `Khong co quan nao ten ${district}`,
+          message: `Khong tim thay quan nao`,
         });
       }
-      const rooms = await Room.findById(req.body.room);
+      const rooms = await Room.findById(req.body.room).populate("district");
       if (rooms.length === 0) {
         return res.status(404).json({
           message: `Khong tim thay phong nao co ten ${room}`,
+        });
+      }
+
+      if (isDistrict._id.toString() != rooms.district._id.toString()) {
+        return res.json({
+          message: `Phong nay khong o quan ${isDistrict.name} ma o quan ${rooms.district.name}`,
         });
       }
 
@@ -231,12 +240,12 @@ class HotelController {
   //[GET] /hotel/get-by-district
   async getHotelByDistrictName(req, res) {
     try {
-      const nameHotel = req.body.name;
-      const regex = new RegExp(nameHotel, "i");
+      const district = req.params.id;
+      const districtId = new ObjectId(district);
       const data = await District.aggregate([
         {
           $match: {
-            name: regex,
+            _id: districtId,
           },
         },
         {
@@ -277,18 +286,15 @@ class HotelController {
       }
       return res.status(200).json(data[0] || {});
     } catch (err) {
+      console.error(err);
       return res.status(500).json(err);
     }
   }
 
-  //[GET] /hotel/get-one-hotel get by name hotel
+  //[GET] /hotel/get-one-hotel get by idHotel
   async getOneHotel(req, res) {
     try {
-      const nameHotel = req.body.nameHotel;
-      const regex = new RegExp(`^${nameHotel}`, "i");
-      const hotel = await Hotel.findOne({
-        nameHotel: regex,
-      })
+      const hotel = await Hotel.findById(req.params.id)
         .populate("district")
         .populate("room")
         .populate({
@@ -309,7 +315,7 @@ class HotelController {
   //[GET] /hotel/room
   async getRoom(req, res) {
     try {
-      const data = await Room.find({ district: req.body.district }).populate(
+      const data = await Room.find({ district: req.params.id }).populate(
         "district"
       );
       if (!data.length) {
