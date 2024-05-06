@@ -1,11 +1,7 @@
-const User = require("../models/User");
-const Hotel = require("../models/Hotel");
 const Room = require("../models/Room");
 const Booking = require("../models/Booking");
 const Status = require("../models/Status");
 const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
-const { ObjectId } = require("mongoose");
 
 class BookingController {
   //[GET] /booking/getAll
@@ -20,13 +16,14 @@ class BookingController {
         })
         .populate("room")
         .populate("status");
-      if (!data) {
+      if (!data.length) {
         return res.status(404).json({
           message: "Khong tim thay Booking nao",
         });
       }
       return res.status(200).json(data);
     } catch (err) {
+      console.error(err);
       return res.status(500).json(err);
     }
   }
@@ -34,17 +31,43 @@ class BookingController {
   //[GET] /booking/:userId
   async getBookingFromUserId(req, res) {
     try {
-      const data = await Booking.find({ user: req.params.id });
-      if (!data) {
+      const data = await Booking.find({ user: req.params.id })
+        .populate({ path: "user", select: "-password -admin" })
+        .populate("hotel")
+        .populate({
+          path: "hotel",
+          populate: "district",
+        })
+        .populate("room")
+        .populate("status");
+      if (!data.length) {
         return res.status(404).json({
           message: "Khong tim thay Booking nao",
         });
       }
       return res.status(200).json(data);
     } catch (err) {
+      console.error(err);
       return res.status(500).json(err);
     }
   }
+
+  //[GET] /booking/status
+  async getStatus(req, res) {
+    try {
+      const data = await Status.find();
+      if (!data.length) {
+        res.status(404).json({
+          message: "Khong thay status nao",
+        });
+      }
+      return res.status(200).json(data);
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json(err);
+    }
+  }
+
   //[DELETE] /booking
   async deleteBooking(req, res) {
     try {
