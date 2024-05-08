@@ -6,7 +6,7 @@ class UserController {
 
   async getAllUser(req, res) {
     try {
-      const users = await User.find({}, { password: 0, admin: 0 });
+      const users = await User.find();
       if (!users) {
         return res.status(404).json({
           message: "khong tim thay User nao",
