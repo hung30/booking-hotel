@@ -50,7 +50,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/khach-san" element={<HotelPage />} />
-            <Route path="/admin-user" element={<AdminUserPage />} />
+            <Route path="/admin-users" element={<AdminUserPage />} />
           </Routes>
           <Footer />
         </BrowserRouter>

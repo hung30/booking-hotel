@@ -4,7 +4,6 @@ import {
   Table,
   Button,
   Popconfirm,
-  Form,
   message,
   Space,
 } from "antd";
@@ -68,7 +67,6 @@ export function AdminUserPage() {
             <Button
               onClick={() => {
                 console.log("selectedRecord", record);
-                // setSelectedRecord(record);
               }}
             >
               Xem
@@ -112,7 +110,7 @@ export function AdminUserPage() {
             </Space>
           );
         }
-        return null; // Ẩn button Xóa nếu username là admin
+        return null; 
       },
     },
   ];
