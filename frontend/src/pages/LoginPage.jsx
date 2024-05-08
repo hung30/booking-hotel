@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { Box, Button, IconButton, Snackbar } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { message as ms } from "antd";
 
 function LoginPage() {
   const [username, setUsername] = useState("");
@@ -16,6 +17,7 @@ function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [open, setOpen] = React.useState(false);
+  const [showMessage, setShowMessage] = useState(false);
   const navigate = useNavigate();
 
   const handleSignUpClick = () => {
@@ -61,6 +63,11 @@ function LoginPage() {
       // window.alert("Tài khoản hoặc mật khẩu không đúng");
       setOpen(true);
       setMessage("Tài khoản hoặc mật khẩu không đúng");
+      setShowMessage(true);
+      setTimeout(() => {
+        setShowMessage(false);
+      }, 2000);
+      ms.error("Tài khoản hoặc mật khẩu không đúng");
     }
   };
 
@@ -213,7 +220,7 @@ function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
               />
               <a href="#">Forgot your password?</a>
-              {message ? (
+              {showMessage ? (
                 <>
                   <p
                     style={{
@@ -224,17 +231,9 @@ function LoginPage() {
                   >
                     {message}
                   </p>
-                  <Box>
-                    <button className="tag_button" onClick={handleSignInClick}>
-                      Sign In
-                    </button>
-                    <Snackbar
-                      open={open}
-                      message={message}
-                      action={action}
-                      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                    />
-                  </Box>
+                  <button className="tag_button" onClick={handleSignInClick}>
+                    Sign In
+                  </button>
                 </>
               ) : (
                 <button className="tag_button" onClick={handleSignInClick}>

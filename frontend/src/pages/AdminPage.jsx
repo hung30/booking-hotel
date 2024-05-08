@@ -20,14 +20,15 @@ import {
   UploadOutlined,
 } from "@ant-design/icons";
 import axios from "axios";
-// import moment from 'moment';
-import numeral from "numeral";
+import HeaderAdmin from "../components/HeaderAdmin";
+import "../css_class/AdminPage.css"
 
 function AdminPage() {
   const navigate = useNavigate();
   const [isPreview, setIsPreview] = React.useState(false);
-  const [categories, setCategories] = React.useState([]);
-  const [products, setProducts] = React.useState([]);
+  const [districts, setDistrict] = React.useState([]);
+  const [hotels, setHotel] = React.useState([]);
+  const [rooms, setRooms] = React.useState([]);
   const [selectedRecord, setSelectedRecord] = React.useState(null);
   const [refresh, setRefresh] = React.useState(0);
   const [editFormVisible, setEditFormVisible] = React.useState(false);
@@ -35,27 +36,53 @@ function AdminPage() {
   const [file, setFile] = React.useState(null);
   const [createForm] = Form.useForm();
   const [updateForm] = Form.useForm();
-  const API_URL = "http://localhost:3000";
-  const handleLogout = () => {
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    navigate("/login");
-  };
+  const [updateImage, setUpdateImage] = React.useState(null);
+  const [oldImage, setOldImage] = React.useState(null);
+
   useEffect(() => {
-    const token = document.cookie
+    const accessToken = document.cookie
       .split("; ")
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
-    if (!token) {
+    if (!accessToken) {
       navigate("/login");
     }
   }, [navigate]);
 
+  useEffect(() => {
+    axios.get("/hotel").then((response) => {
+      setHotel(response.data);
+      // console.log(response.data);
+    });
+  }, [refresh]);
+
+  useEffect(() => {
+    axios.get("/hotel/district").then((response) => {
+      setDistrict(response.data);
+      console.log(response.data);
+    });
+  }, [refresh]);
+
+  // Hardcoded data for rooms
+  const handleDistrictChange = async (id) => {
+    try {
+      const res = await axios.get(`/hotel/room-from-district/${id}`);
+      setRooms(res.data);
+    } catch (error) {
+      console.error("Error fetching hotel data:", error);
+      message.error(error.response.data.message);
+      setRooms([]);
+      return null;
+    }
+  };
+
   const columns = [
     {
       title: "Hình ảnh",
-      key: "imageUrl",
-      dataIndex: "imageUrl",
+      key: "image",
+      dataIndex: "image",
       width: "1%",
+      className: "w-full md:w-1/6",
       render: (text, record) => {
         return (
           <div>
@@ -70,7 +97,7 @@ function AdminPage() {
                     visible: false,
                   }}
                   width={60}
-                  src={`${API_URL}${text}`}
+                  src={text.src}
                 />
                 <div
                   style={{
@@ -83,11 +110,11 @@ function AdminPage() {
                       onVisibleChange: (vis) => setIsPreview(vis),
                     }}
                   >
-                    <Image src={`${API_URL}${text}`} />
+                    <Image src={text.src} />
                     {record &&
                       record.images &&
                       record.images.map((image) => {
-                        return <Image key={image} src={`${API_URL}${image}`} />;
+                        return <Image key={image} src={text.src} />;
                       })}
                   </Image.PreviewGroup>
                 </div>
@@ -98,27 +125,48 @@ function AdminPage() {
       },
     },
     {
-      title: "Danh mục",
-      dataIndex: "category",
-      key: "category",
+      title: "Khu vực",
+      dataIndex: "district",
+      key: "district",
+      className: "wrap-text",
       render: (text, record) => {
-        return <strong>{record?.category?.name}</strong>;
+        return <strong>{record?.district?.name}</strong>;
       },
     },
     {
       title: "Tên khách sạn",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "nameHotel",
+      key: "nameHotel",
+      className: "wrap-text",
       render: (text) => {
         return <strong>{text}</strong>;
       },
     },
     {
-      title: "Giá",
-      dataIndex: "price",
-      key: "price",
+      title: "Thông tin mô tả",
+      dataIndex: "description",
+      key: "description",
+      className: "wrap-text",
       render: (text) => {
-        return <span>{numeral(text).format("0,0")}VND</span>;
+        return <strong>{text}</strong>;
+      },
+    },
+    {
+      title: "Khoảng cách đến trung tâm",
+      dataIndex: "distanceFormCenter",
+      key: "distanceFormCenter",
+      className: "wrap-text",
+      render: (text) => {
+        return <strong>{text}</strong>;
+      },
+    },
+    {
+      title: "Điểm đánh giá",
+      dataIndex: "evaluate",
+      key: "evaluate",
+      className: "wrap-text",
+      render: (text) => {
+        return <strong>{text}</strong>;
       },
     },
     {
@@ -154,7 +202,7 @@ function AdminPage() {
               onConfirm={() => {
                 const id = record._id;
                 axios
-                  .delete("/product/" + id)
+                  .delete("/hotel/delete-hotel/" + id)
                   .then((response) => {
                     message.success("Xóa thành công!");
                     setRefresh((f) => f + 1);
@@ -176,35 +224,12 @@ function AdminPage() {
               icon={<EditOutlined />}
               onClick={() => {
                 setSelectedRecord(record);
-                console.log("Selected Record", record);
+                // console.log(record);
+                setOldImage(record.image);
                 updateForm.setFieldsValue(record);
                 setEditFormVisible(true);
               }}
             />
-            {/*BUTTON UPLOAD ẢNH */}
-            <Upload
-              showUploadList={false}
-              name="file"
-              action={API_URL + "/upload/products/" + record._id}
-              headers={{ authorization: "authorization-text" }}
-              onChange={(info) => {
-                if (info.file.status !== "uploading") {
-                  console.log(info.file, info.fileList);
-                }
-
-                if (info.file.status === "done") {
-                  message.success(
-                    `${info.file.name} file uploaded successfully`
-                  );
-
-                  setRefresh((f) => f + 1);
-                } else if (info.file.status === "error") {
-                  message.error(`${info.file.name} file upload failed.`);
-                }
-              }}
-            >
-              <Button icon={<UploadOutlined />} />
-            </Upload>
           </Space>
         );
       },
@@ -212,36 +237,72 @@ function AdminPage() {
   ];
 
   const onFinish = (values) => {
-    axios
-      .post("/product", values)
-      .then((response) => {
-        const { _id } = response.data;
+    let data = new FormData();
 
-        const formData = new FormData();
-        formData.append("file", file);
-        //POST ẢNH
-        axios
-          .post(API_URL + "/upload/products/" + _id, formData)
-          .then((respose) => {
-            message.success("Thêm mới thành công!");
-            createForm.resetFields();
-            setRefresh((f) => f + 1);
-          })
-          .catch((err) => {
-            message.error("Upload file bị lỗi!");
-          });
+    // Thêm dữ liệu vào FormData
+    data.append("district", values.district);
+    data.append("room", values.room);
+    data.append("nameHotel", values.nameHotel);
+    data.append("description", values.description);
+    data.append("distanceFormCenter", values.distanceFormCenter);
+    data.append("evaluate", values.evaluate);
+    data.append("image", values.image.file);
+
+    // Gửi yêu cầu POST bằng axios
+    axios
+      .post("/hotel/new-hotel", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        message.success("Thêm mới thành công!");
+        createForm.resetFields();
+        setRefresh((f) => f + 1);
       })
       .catch((err) => {
+        // Xử lý lỗi
+        console.log(err);
         message.error("Thêm mới bị lỗi!");
       });
   };
+
   const onFinishFailed = (errors) => {
     console.log("🐣", errors);
   };
+
   // UPDATE DỮ LIỆU
-  const onUpdateFinish = (values) => {
+  async function urlToFile(url, filename, mimeType) {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return new File([blob], filename, { type: mimeType });
+  }
+
+  const onUpdateFinish = async (values) => {
+    let data = new FormData();
+    data.append("nameHotel", values.nameHotel);
+    data.append("description", values.description);
+    data.append("evaluate", values.evaluate);
+    if (oldImage) {
+      const filename = "image.jpg";
+      const mimeType = "image/jpeg";
+
+      try {
+        const file = await urlToFile(oldImage.src, filename, mimeType);
+        data.append("image", file);
+      } catch (error) {
+        console.error("Error converting oldImage URL to File:", error);
+      }
+    } else if (values.image && values.image.file) {
+      data.append("image", values.image.file);
+    }
     axios
-      .patch("/product/" + selectedRecord._id, values)
+      .put("/hotel/update-hotel/" + selectedRecord._id, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((response) => {
         message.success("Cập nhật thành công!");
         updateForm.resetFields();
@@ -259,6 +320,7 @@ function AdminPage() {
 
   return (
     <div>
+      <HeaderAdmin />
       {/* FROM INPUT SẢN PHẨM */}
       <Form
         form={createForm}
@@ -270,29 +332,50 @@ function AdminPage() {
         onFinishFailed={onFinishFailed}
         autoComplete="on"
       >
+        <h2 className="text-center text-3xl font-normal pb-3 text-red-500">
+          Thêm khách sạn
+        </h2>
         <Form.Item
-          label="Danh mục sản phẩm"
-          name="categoryId"
-          rules={[{ required: true, message: "Chưa nhập Tên sản phẩm" }]}
+          label="Khu vực"
+          name="district"
+          rules={[{ required: true, message: "Chưa chọn khu vực" }]}
           hasFeedback
         >
           <Select
-            style={{ width: 300 }}
+            style={{ width: 200 }}
             options={
-              categories &&
-              categories.map((c) => {
+              districts &&
+              districts.map((c) => {
                 return {
                   value: c._id,
                   label: c.name,
                 };
               })
             }
+            onChange={handleDistrictChange}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Phòng"
+          name="room"
+          rules={[{ required: true, message: "Chưa chọn phòng" }]}
+          hasFeedback
+        >
+          <Select
+            style={{ width: 400 }}
+            options={rooms.map((room) => {
+              return {
+                value: room._id,
+                label: room.name,
+              };
+            })}
           />
         </Form.Item>
 
         <Form.Item
           label="Tên khách sạn"
-          name="name"
+          name="nameHotel"
           rules={[{ required: true, message: "Chưa nhập Tên khách sạn" }]}
           hasFeedback
         >
@@ -300,22 +383,48 @@ function AdminPage() {
         </Form.Item>
 
         <Form.Item
-          label="Giá"
-          name="price"
-          rules={[{ required: true, message: "Chưa nhập giá" }]}
+          label="Thông tin mô tả"
+          name="description"
+          rules={[{ required: true, message: "Chưa nhập mô tả" }]}
           hasFeedback
         >
-          <InputNumber style={{ minWidth: 200 }} />
+          <Input style={{ width: 300 }} />
         </Form.Item>
-        <Form.Item label="Hình minh họa" name="file">
+
+        <Form.Item
+          label="Khoảnh cách đến trung tâm"
+          name="distanceFormCenter"
+          rules={[{ required: true, message: "Chưa nhập khoảng cách" }]}
+          hasFeedback
+        >
+          <Input style={{ width: 300, marginLeft: 50 }} />
+        </Form.Item>
+
+        <Form.Item
+          label="Đánh giá"
+          name="evaluate"
+          rules={[{ required: true, message: "Chưa nhập đánh giá" }]}
+          hasFeedback
+        >
+          <Input
+            type="number"
+            min={1}
+            max={5}
+            style={{ width: 300, marginLeft: 50 }}
+          />
+        </Form.Item>
+
+        <Form.Item label="Hình minh họa" name="image">
           <Upload
             showUploadList={true}
-            beforeUpload={(file) => {
-              setFile(file);
+            beforeUpload={(image) => {
+              setFile(image);
               return false;
             }}
           >
-            <Button icon={<UploadOutlined />}>Chọn hình ảnh</Button>
+            <Button style={{ marginLeft: 50 }} icon={<UploadOutlined />}>
+              Chọn hình ảnh
+            </Button>
           </Upload>
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
@@ -326,9 +435,10 @@ function AdminPage() {
       </Form>
       <Table
         rowKey="_id"
-        dataSource={products}
+        dataSource={hotels}
         columns={columns}
         pagination={false}
+        className="equal-width-columns"
       />
       <Modal
         centered
@@ -348,47 +458,51 @@ function AdminPage() {
           form={updateForm}
           name="update-form"
           labelCol={{ span: 8 }}
-          wrapperCol={{ span: 16 }}
+          wrapperCol={{ span: 26 }}
           initialValues={{ remember: true }}
           onFinish={onUpdateFinish}
           onFinishFailed={onUpdateFinishFailed}
           autoComplete="on"
         >
           <Form.Item
-            label="Danh mục sản phẩm"
-            name="categoryId"
-            rules={[{ required: true, message: "Chưa nhập Tên sản phẩm" }]}
-            hasFeedback
-          >
-            <Select
-              options={
-                categories &&
-                categories.map((c) => {
-                  return {
-                    value: c._id,
-                    label: c.name,
-                  };
-                })
-              }
-            />
-          </Form.Item>
-
-          <Form.Item
             label="Tên khách sạn"
-            name="name"
+            name="nameHotel"
             rules={[{ required: true, message: "Chưa nhập Tên khách sạn" }]}
             hasFeedback
           >
-            <Input />
+            <Input style={{ width: 300 }} />
           </Form.Item>
 
           <Form.Item
-            label="Giá"
-            name="price"
-            rules={[{ required: true, message: "Chưa nhập giá" }]}
+            label="Thông tin mô tả"
+            name="description"
+            rules={[{ required: true, message: "Chưa chỉnh mô tả" }]}
             hasFeedback
           >
-            <InputNumber style={{ minWidth: 300 }} />
+            <Input style={{ width: 300 }} />
+          </Form.Item>
+
+          <Form.Item
+            label="Đánh giá"
+            name="evaluate"
+            rules={[{ required: true, message: "Chưa nhập đánh giá" }]}
+            hasFeedback
+          >
+            <Input type="number" min={1} max={5} style={{ width: 300 }} />
+          </Form.Item>
+
+          <Form.Item label="Hình minh họa" name="image">
+            <Upload
+              showUploadList={true}
+              beforeUpload={(image) => {
+                setUpdateImage(image);
+                return false;
+              }}
+            >
+              <Button style={{ marginLeft: 50 }} icon={<UploadOutlined />}>
+                Chọn hình ảnh
+              </Button>
+            </Upload>
           </Form.Item>
         </Form>
       </Modal>

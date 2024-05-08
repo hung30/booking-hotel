@@ -1,5 +1,5 @@
 .header {
-  background-color: #3567ff;
+  background-color: #1212c6;
   color: #fff;
   padding: 20px;
   display: flex;
@@ -66,6 +66,6 @@ button {
   padding: 10px;
   border: none;
   margin-right: 10px;
-  background-color: rgb(40, 91, 231);
+  background-color: rgb(66, 135, 232);
   color: white;
 }

@@ -343,6 +343,16 @@ class HotelController {
       return res.status(500).json(err);
     }
   }
+  //[GET] /hotel/room/:id
+  async getRoomById(req, res) {
+    try {
+      const data = await Room.findById(req.params.id);
+      return res.status(200).json(data);
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json(err);
+    }
+  }
 }
 
 module.exports = new HotelController();
