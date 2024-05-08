@@ -44,6 +44,7 @@ router.post(
 
 router.get("/get-by-district/:id", HotelController.getHotelByDistrictName);
 router.get("/get-one-hotel/:id", HotelController.getOneHotel);
+router.get("/room/:id", HotelController.getRoomById);
 router.get(
   "/room-from-district/:id",
   middleWareController.isLogin,

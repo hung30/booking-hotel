@@ -1,16 +1,9 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Table,
-  Button,
-  Popconfirm,
-  message,
-  Space,
-} from "antd";
-import {
-  DeleteOutlined,
-} from "@ant-design/icons";
+import { Table, Button, Popconfirm, message, Space } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
 import axios from "axios";
+import HeaderAdmin from "./../components/HeaderAdmin";
 
 export function AdminUserPage() {
   const navigate = useNavigate();
@@ -40,16 +33,16 @@ export function AdminUserPage() {
       key: "username",
       className: "whitespace-normal break-words",
       render: (text, record) => {
-        return record.username !== "admin" ? <strong>{text}</strong> : null;
+        return <strong>{text}</strong>;
       },
     },
     {
-      title: "email",
+      title: "Email",
       dataIndex: "email",
       key: "email",
       className: "whitespace-normal break-words",
       render: (text, record) => {
-        return record.username !== "admin" ? <strong>{text}</strong> : null;
+        return <strong>{text}</strong>;
       },
     },
     {
@@ -58,7 +51,7 @@ export function AdminUserPage() {
       key: "telephone",
       className: "whitespace-normal break-words",
       render: (text, record) => {
-        return record.username !== "admin" ? <strong>{text}</strong> : null;
+        return <strong>{text}</strong>;
       },
     },
     {
@@ -113,20 +106,20 @@ export function AdminUserPage() {
             </Space>
           );
         }
-        return null; 
+        return null;
       },
     },
   ];
-  
-  
-return (
+
+  return (
     <div>
-        <Table
+      <HeaderAdmin />
+      <Table
         rowKey="_id"
         dataSource={Users}
         columns={columns}
         pagination={false}
       />
     </div>
-)
+  );
 }
