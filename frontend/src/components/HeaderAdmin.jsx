@@ -12,7 +12,7 @@ const HeaderAdmin = () => {
             </Link>
           </li>
           <li style={styles.menuItem}>
-            <Link to="/" style={styles.link}>
+            <Link to="/admin-users" style={styles.link}>
               Quản lý người dùng
             </Link>
           </li>
