@@ -1,0 +1,14 @@
+.wrap-text {
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    word-break: break-all !important;
+  }
+
+  .equal-width-columns {
+    table-layout: fixed; /* Đảm bảo các cột có cùng độ rộng */
+  }
+  
+  .equal-width-columns th,
+  .equal-width-columns td {
+    width: calc(100% / 6); /* Chia đều cho 7 cột */
+  }

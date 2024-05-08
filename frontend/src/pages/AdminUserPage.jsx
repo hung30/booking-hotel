@@ -38,6 +38,7 @@ export function AdminUserPage() {
       title: "Tên khách hàng",
       dataIndex: "username",
       key: "username",
+      className: "whitespace-normal break-words",
       render: (text, record) => {
         return record.username !== "admin" ? <strong>{text}</strong> : null;
       },
@@ -46,6 +47,7 @@ export function AdminUserPage() {
       title: "email",
       dataIndex: "email",
       key: "email",
+      className: "whitespace-normal break-words",
       render: (text, record) => {
         return record.username !== "admin" ? <strong>{text}</strong> : null;
       },
@@ -54,6 +56,7 @@ export function AdminUserPage() {
       title: "Điện thoại liên lạc",
       dataIndex: "telephone",
       key: "telephone",
+      className: "whitespace-normal break-words",
       render: (text, record) => {
         return record.username !== "admin" ? <strong>{text}</strong> : null;
       },
