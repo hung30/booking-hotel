@@ -63,15 +63,18 @@ function AdminPage() {
     });
   }, [refresh]);
 
-  useEffect(() => {
-    // Hardcoded data for rooms
-    const hardcodedRooms = [
-      { _id: "6627bc2f70ed5b4fac0a88fa", name: "Room 101" },
-      { _id: "662732a2702b5588003e15c3", name: "Room 102" },
-      { _id: "6627dbed702b5588003e15f2", name: "Room 103" },
-    ];
-    setRooms(hardcodedRooms);
-  }, []);
+  // Hardcoded data for rooms
+  const handleDistrictChange = async (id) => {
+    try {
+      const res = await axios.get(`/hotel/room-from-district/${id}`);
+      setRooms(res.data);
+    } catch (error) {
+      console.error("Error fetching hotel data:", error);
+      message.error(error.response.data.message);
+      setRooms([]);
+      return null;
+    }
+  };
 
   const columns = [
     {
@@ -329,6 +332,9 @@ function AdminPage() {
         onFinishFailed={onFinishFailed}
         autoComplete="on"
       >
+        <h2 className="text-center text-3xl font-normal pb-3 text-red-500">
+          Thêm khách sạn
+        </h2>
         <Form.Item
           label="Khu vực"
           name="district"
@@ -346,6 +352,7 @@ function AdminPage() {
                 };
               })
             }
+            onChange={handleDistrictChange}
           />
         </Form.Item>
 
