@@ -86,7 +86,7 @@ export default function HotelPage() {
                   className="rounded-md w-[200px] h-[200px]"
                 />
                 <div className="m-4"></div>
-                <div className="relative flex-shrink-0 w-[545px]">
+                <div className="relative flex-shrink-0 w-[400px]">
                   <h4 className="text-2xl font-medium text-blue-600">
                     {hotel.nameHotel}
                   </h4>
@@ -96,7 +96,7 @@ export default function HotelPage() {
                     </span>{" "}
                     - {hotel.distanceFormCenter}
                   </p>
-                  <p className="text-sm">{hotel?.description}</p>
+                  <p className="text-sm min-w-[400px] max-h-[100px] overflow-hidden break-words">{hotel?.description}</p>
                   <button
                     className="absolute bottom-0 left-0 rounded-md"
                     onClick={handleBooking.bind(null, hotel._id)}
@@ -131,7 +131,7 @@ export default function HotelPage() {
                 className="rounded-md w-[200px] h-[200px]"
               />
               <div className="m-4"></div>
-              <div className="relative flex-shrink-0 w-[545px]">
+              <div className="relative flex-shrink-0 w-[400px]">
                 <h4 className="text-2xl font-medium text-blue-600">
                   {hotel.nameHotel}
                 </h4>
@@ -141,7 +141,7 @@ export default function HotelPage() {
                   </span>{" "}
                   - {hotel.distanceFormCenter}
                 </p>
-                <p className="text-sm">{hotel?.description}</p>
+                <p className="text-sm min-w-[400px] max-h-[100px] overflow-hidden break-words">{hotel?.description}</p>
                 <button
                   className="absolute bottom-0 left-0 rounded-md"
                   onClick={handleBooking.bind(null, hotel._id)}
