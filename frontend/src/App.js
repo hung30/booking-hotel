@@ -8,6 +8,7 @@ import Footer from "./components/Footer";
 import HotelPage from "./pages/HotelPage";
 import { HotelContext } from "./contexts/HotelContext";
 import axios from "axios";
+import { AdminUserPage } from "./pages/AdminUserPage";
 
 function App() {
   const [hotels, setHotels] = useState([]);
@@ -49,6 +50,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/khach-san" element={<HotelPage />} />
+            <Route path="/admin-user" element={<AdminUserPage />} />
           </Routes>
           <Footer />
         </BrowserRouter>
