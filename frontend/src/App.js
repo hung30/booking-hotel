@@ -9,6 +9,8 @@ import HotelPage from "./pages/HotelPage";
 import { HotelContext } from "./contexts/HotelContext";
 import axios from "axios";
 import { AdminUserPage } from "./pages/AdminUserPage";
+import AdminRoomPage from "./pages/AdminRoomPage";
+import BookingPage from "./pages/BookingPage";
 
 function App() {
   const [hotels, setHotels] = useState([]);
@@ -51,6 +53,8 @@ function App() {
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/khach-san" element={<HotelPage />} />
             <Route path="/admin-users" element={<AdminUserPage />} />
+            <Route path="/admin-rooms" element={<AdminRoomPage />} />
+            <Route path="/admin-bookings" element={<BookingPage />} />
           </Routes>
           <Footer />
         </BrowserRouter>
