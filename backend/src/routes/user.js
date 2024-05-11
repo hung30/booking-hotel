@@ -16,6 +16,11 @@ router.put(
   middleWareController.isLogin,
   userController.updateUser
 );
+router.put(
+  "/change-password/:id",
+  middleWareController.isLogin,
+  userController.changePassword
+);
 router.delete(
   "/delete-user/:id",
   middleWareController.isLogin,

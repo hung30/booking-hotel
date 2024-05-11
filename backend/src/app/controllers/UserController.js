@@ -71,6 +71,27 @@ class UserController {
     }
   }
 
+  //[PUT] /user/change-password
+  async changePassword(req, res) {
+    try {
+      const salt = await brcypt.genSalt(10);
+      const hashed = await brcypt.hash(req.body.password, salt);
+      const user = await User.findByIdAndUpdate(req.params.id, {
+        password: hashed,
+      });
+      if (!user) {
+        return res.json({
+          message: "Cập nhật thất bại",
+        });
+      }
+      return res.status(200).json({
+        message: "Cập nhật thành công",
+      });
+    } catch (err) {
+      return res.status(500).json(err);
+    }
+  }
+
   //[DELETE] /delete-user
   async deleteUser(req, res) {
     try {

@@ -6,7 +6,6 @@ class AuthController {
   // [POST] /register
   async register(req, res) {
     const salt = await brcypt.genSalt(10);
-    console.log(req.body.password);
     const hashed = await brcypt.hash(req.body.password, salt);
     try {
       const validUser = await User.findOne({
@@ -53,7 +52,11 @@ class AuthController {
       }
       if (user && validPassword) {
         const token = jwt.sign(
-          { id: user._id.toString(), admin: user.admin, username:user.username },
+          {
+            id: user._id.toString(),
+            admin: user.admin,
+            username: user.username,
+          },
           process.env.JWT_KEY
         );
         return res.status(200).json({
