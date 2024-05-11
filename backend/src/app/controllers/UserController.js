@@ -34,29 +34,36 @@ class UserController {
   // [PUT] /update-user
   async updateUser(req, res) {
     try {
-      const salt = await brcypt.genSalt(10);
-      const hashed = await brcypt.hash(req.body.password, salt);
       const userId = req.params.id;
-      const user = await User.findByIdAndUpdate(
-        userId,
-        {
-          username: req.body.username,
-          password: hashed,
-          email: req.body.email,
-          telephone: req.body.telephone,
-        },
-        { new: true }
+      const users = await User.find({ _id: { $ne: req.params.id } });
+      const isUserNameExist = users.some(
+        (user) => user.username === req.body.username
       );
-      if (!user) {
-        return res.json({
-          message: "Cap nhat that bai",
+      if (isUserNameExist) {
+        return res.status(400).json({
+          message: "Username đã tồn tại",
         });
       }
-      const { password, admin, ...others } = user._doc;
-      return res.status(200).json({
-        message: "Cap nhat thanh cong",
-        others,
-      });
+      console.log(users);
+      // const user = await User.findByIdAndUpdate(
+      //   userId,
+      //   {
+      //     username: req.body.username,
+      //     email: req.body.email,
+      //     telephone: req.body.telephone,
+      //   },
+      //   { new: true }
+      // );
+      // if (!user) {
+      //   return res.json({
+      //     message: "Cap nhat that bai",
+      //   });
+      // }
+      // const { password, admin, ...others } = user._doc;
+      // return res.status(200).json({
+      //   message: "Cap nhat thanh cong",
+      //   others,
+      // });
     } catch (err) {
       return res.status(500).json(err);
     }
