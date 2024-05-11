@@ -120,6 +120,31 @@ class BookingController {
       return res.status(500).json(err);
     }
   }
+
+  //[PUT] /booking/
+  async updateBooking(req, res) {
+    try {
+      const booking = await Booking.findByIdAndUpdate(
+        req.params.id,
+        {
+          status: req.body.status,
+        },
+        { new: true }
+      );
+      if (!booking) {
+        return res.json({
+          message: "That bai",
+        });
+      }
+      return res.status(200).json({
+        message: "Thanh cong",
+        booking,
+      });
+    } catch (error) {
+      console.error(err);
+      return res.status(500).json(err);
+    }
+  }
 }
 
 module.exports = new BookingController();

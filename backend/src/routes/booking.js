@@ -32,4 +32,11 @@ router.get(
   bookingController.getBookingFromUserId
 );
 
+router.put(
+  "/:id",
+  middleWareController.isLogin,
+  middleWareController.isAdmin,
+  bookingController.updateBooking
+);
+
 module.exports = router;
