@@ -18,7 +18,7 @@ app.use(morgan("combined"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const corsOptions = {
-  origin: "*", // Đổi lại thành địa chỉ của trang web của bạn
+  origin: "https://booking-hotel-iota.vercel.app/", // Đổi lại thành địa chỉ của trang web của bạn
   credentials: true, // Cho phép gửi cookie
 };
 app.use(cors(corsOptions));
