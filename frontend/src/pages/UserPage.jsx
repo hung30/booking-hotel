@@ -62,6 +62,7 @@ export default function UserPage() {
       try {
         const res = await axios.put(`/user/update-user/${user._id}`, values);
         message.success("Sửa thông tin thành công");
+        navigate("/");
       } catch (error) {
         console.error("Error fetching hotel data:", error);
         message.error(error.response.data.message + " không thể cập nhật");

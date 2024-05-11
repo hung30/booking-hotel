@@ -1,10 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import HeaderUser from "./../components/HeaderUser";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { message } from "antd";
+import { useNavigate } from "react-router-dom";
 export default function ChangePasswordPage() {
+  const [user, setUser] = useState({
+    username: "",
+    email: "",
+    telephone: "",
+  });
+  const navigate = useNavigate();
+  useEffect(() => {
+    async function getUser() {
+      try {
+        const res = await axios.get("/user/get-user");
+        return res;
+      } catch (error) {
+        console.error("Error fetching hotel data:", error);
+        return setUser({});
+      }
+    }
+    getUser().then((res) => {
+      setUser(res.data);
+    });
+  }, [navigate]);
   const formik = useFormik({
     initialValues: {
       password: "",
@@ -20,8 +41,12 @@ export default function ChangePasswordPage() {
     }),
     onSubmit: async (values) => {
       try {
-        const res = await axios.put("/user/change-password", values);
+        const res = await axios.put(
+          `/user/change-password/${user._id}`,
+          values
+        );
         message.success("Đổi mật khẩu thành công");
+        navigate("/");
       } catch (error) {
         console.error("Error fetching hotel data:", error);
         message.error("không thể đổi mật khẩu");
