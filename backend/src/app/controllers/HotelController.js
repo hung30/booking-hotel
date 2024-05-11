@@ -104,14 +104,8 @@ class HotelController {
           message: "Khong tim thay khach san",
         });
       }
-      const district = await District.findById(req.body.district);
-      if (!district) {
-        return res.status(404).json({
-          message: "Khong tim thay quan",
-        });
-      }
 
-      const roomId = await Room.findById(req.body.room);
+      const roomId = await Room.findById(req.params.id);
 
       if (!roomId) {
         return res.status(404).json({
@@ -202,6 +196,22 @@ class HotelController {
     try {
       const deletedHotel = await Hotel.findByIdAndDelete(req.params.id);
       if (!deletedHotel) {
+        return res.json({
+          message: "Xoa that bai",
+        });
+      }
+      return res.status(200).json({
+        message: "Xoa thanh cong",
+      });
+    } catch (err) {
+      return res.status(500).json(err);
+    }
+  }
+  //[DELETE] /hotel/delete-room
+  async deleteRoom(req, res) {
+    try {
+      const deleteRoom = await Room.findByIdAndDelete(req.params.id);
+      if (!deleteRoom) {
         return res.json({
           message: "Xoa that bai",
         });
@@ -354,7 +364,7 @@ class HotelController {
     }
   }
 
-  //[GET] /hotel/all-rom
+  //[GET] /hotel/all-room
   async getAllRoom(req, res) {
     try {
       const data = await Room.find().populate("district");
