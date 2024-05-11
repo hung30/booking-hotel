@@ -35,10 +35,13 @@ function LoginPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post("/auth/login", {
-        username: username,
-        password: password,
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/auth/login`,
+        {
+          username: username,
+          password: password,
+        }
+      );
       if (response) {
         token = response.data.token;
       } else {
