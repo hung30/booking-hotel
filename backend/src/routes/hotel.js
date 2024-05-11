@@ -11,6 +11,12 @@ router.delete(
   middleWareController.isAdmin,
   HotelController.deleteHotel
 );
+router.delete(
+  "/delete-room/:id",
+  middleWareController.isLogin,
+  middleWareController.isAdmin,
+  HotelController.deleteRoom
+);
 
 router.put(
   "/update-hotel/:id",
@@ -21,7 +27,7 @@ router.put(
 );
 
 router.put(
-  "/add-room-hotel",
+  "/add-room-hotel/:id",
   middleWareController.isLogin,
   middleWareController.isAdmin,
   HotelController.addRoomHotel
