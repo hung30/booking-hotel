@@ -16,7 +16,6 @@ export default function UserPage() {
   const [email, setEmail] = useState("");
   const [telephone, setTelephone] = useState("");
 
-  console.log(username, email, telephone);
   const navigate = useNavigate();
   useEffect(() => {
     async function getUser() {
@@ -61,17 +60,12 @@ export default function UserPage() {
     }),
     onSubmit: async (values) => {
       try {
-        const res = await axios.put(
-          `http://localhost:3000/user/update-user/${user._id}`,
-          values
-        );
-        console.log(res);
+        const res = await axios.put(`/user/update-user/${user._id}`, values);
         message.success("Sửa thông tin thành công");
       } catch (error) {
         console.error("Error fetching hotel data:", error);
+        message.error(error.response.data.message + " không thể cập nhật");
       }
-      message.success("Sửa thông tin thành công!");
-      console.log(values);
     },
   });
   useEffect(() => {
@@ -81,24 +75,6 @@ export default function UserPage() {
       telephone: telephone || "",
     });
   }, [username, email, telephone]);
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setUser({ ...user, [name]: value });
-  // };
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     await axios.put("/user/update", user);
-  //     alert("Thông tin đã được cập nhật thành công!");
-  //   } catch (error) {
-  //     console.error("Error updating user:", error);
-  //     alert("Đã có lỗi xảy ra khi cập nhật thông tin người dùng.");
-  //   }
-  // };
-  // console.log("formik.values");
-
-  // console.log(formik.values);
-  console.log(formik.errors);
   return (
     <div>
       <HeaderUser />
