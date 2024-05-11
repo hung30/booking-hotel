@@ -114,6 +114,9 @@ export function AdminUserPage() {
   return (
     <div>
       <HeaderAdmin />
+      <h2 className="text-center text-3xl font-normal pb-3 text-red-500">
+          Quản lý người dùng
+        </h2>
       <Table
         rowKey="_id"
         dataSource={Users}

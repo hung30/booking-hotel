@@ -20,6 +20,13 @@ router.get(
 
 router.post("/:id", middleWareController.isLogin, bookingController.booking);
 
+router.put(
+  "/:id",
+  middleWareController.isLogin,
+  middleWareController.isAdmin,
+  bookingController.updateBooking
+);
+
 router.delete(
   "/:id",
   middleWareController.isLogin,

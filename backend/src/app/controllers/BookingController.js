@@ -120,7 +120,6 @@ class BookingController {
       return res.status(500).json(err);
     }
   }
-
   //[PUT] /booking/
   async updateBooking(req, res) {
     try {

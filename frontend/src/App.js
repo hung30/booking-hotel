@@ -9,6 +9,11 @@ import HotelPage from "./pages/HotelPage";
 import { HotelContext } from "./contexts/HotelContext";
 import axios from "axios";
 import { AdminUserPage } from "./pages/AdminUserPage";
+import AdminRoomPage from "./pages/AdminRoomPage";
+import BookingPage from "./pages/BookingPage";
+import UserPage from "./pages/UserPage";
+import BookingHistory from "./pages/BookingHistory";
+import ChangePasswordPage from "./pages/ChangePasswordPage";
 
 function App() {
   const [hotels, setHotels] = useState([]);
@@ -51,6 +56,11 @@ function App() {
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/khach-san" element={<HotelPage />} />
             <Route path="/admin-users" element={<AdminUserPage />} />
+            <Route path="/admin-rooms" element={<AdminRoomPage />} />
+            <Route path="/admin-bookings" element={<BookingPage />} />
+            <Route path="/ca-nhan" element={<UserPage />} />
+            <Route path="/booking-history" element={<BookingHistory />} />
+            <Route path="/change-password" element={<ChangePasswordPage />} />
           </Routes>
           <Footer />
         </BrowserRouter>

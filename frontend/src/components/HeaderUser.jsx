@@ -1,29 +1,24 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const HeaderAdmin = () => {
+const HeaderUser = () => {
   return (
     <div style={styles.header}>
       <nav style={styles.nav}>
         <ul style={styles.menu}>
           <li style={styles.menuItem}>
-            <Link to="/admin" style={styles.link}>
-              Quản lý khách sạn
+            <Link to="/ca-nhan" style={styles.link}>
+              Trang cá nhân
             </Link>
           </li>
           <li style={styles.menuItem}>
-            <Link to="/admin-users" style={styles.link}>
-              Quản lý người dùng
+            <Link to="/booking-history" style={styles.link}>
+              Đơn đặt
             </Link>
           </li>
           <li style={styles.menuItem}>
-            <Link to="/admin-bookings" style={styles.link}>
-              Quản lý đặt phòng
-            </Link>
-          </li>
-          <li style={styles.menuItem}>
-            <Link to="/admin-rooms" style={styles.link}>
-              Quản lý phòng
+            <Link to="/change-password" style={styles.link}>
+              Đổi mật khẩu
             </Link>
           </li>
         </ul>
@@ -59,4 +54,4 @@ const styles = {
   },
 };
 
-export default HeaderAdmin;
+export default HeaderUser;

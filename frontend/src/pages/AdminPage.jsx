@@ -333,7 +333,7 @@ function AdminPage() {
         autoComplete="on"
       >
         <h2 className="text-center text-3xl font-normal pb-3 text-red-500">
-          Thêm khách sạn
+          Quản lý khách sạn
         </h2>
         <Form.Item
           label="Khu vực"

@@ -101,12 +101,12 @@ export default function HotelPage() {
             return (
               <div
                 key={hotel._id.toString()}
-                className="flex flex-row border border-gray-400 p-4 rounded-md mb-4"
+                className="flex flex-row flex-wrap border border-gray-400 p-4 rounded-md mb-4"
               >
                 <img
                   src={hotel.image.src}
                   alt={hotel.image.alt}
-                  className="rounded-md w-[200px] h-[200px]"
+                  className="rounded-md w-[200px] h-[200px] basis-[200px]"
                 />
                 <div className="m-4"></div>
                 <div className="relative w-[500px]">
