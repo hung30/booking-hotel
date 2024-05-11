@@ -44,26 +44,25 @@ class UserController {
           message: "Username đã tồn tại",
         });
       }
-      console.log(users);
-      // const user = await User.findByIdAndUpdate(
-      //   userId,
-      //   {
-      //     username: req.body.username,
-      //     email: req.body.email,
-      //     telephone: req.body.telephone,
-      //   },
-      //   { new: true }
-      // );
-      // if (!user) {
-      //   return res.json({
-      //     message: "Cap nhat that bai",
-      //   });
-      // }
-      // const { password, admin, ...others } = user._doc;
-      // return res.status(200).json({
-      //   message: "Cap nhat thanh cong",
-      //   others,
-      // });
+      const user = await User.findByIdAndUpdate(
+        userId,
+        {
+          username: req.body.username,
+          email: req.body.email,
+          telephone: req.body.telephone,
+        },
+        { new: true }
+      );
+      if (!user) {
+        return res.json({
+          message: "Cap nhat that bai",
+        });
+      }
+      const { password, admin, ...others } = user._doc;
+      return res.status(200).json({
+        message: "Cap nhat thanh cong",
+        others,
+      });
     } catch (err) {
       return res.status(500).json(err);
     }
