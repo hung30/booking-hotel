@@ -51,6 +51,7 @@ router.get(
   middleWareController.isAdmin,
   HotelController.getRoom
 );
+router.get("/all-room", HotelController.getAllRoom);
 router.get("/district", HotelController.getDistrict);
 router.get("/", HotelController.getHotel);
 

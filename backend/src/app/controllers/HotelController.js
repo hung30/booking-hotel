@@ -353,6 +353,17 @@ class HotelController {
       return res.status(500).json(err);
     }
   }
+
+  //[GET] /hotel/all-rom
+  async getAllRoom(req, res) {
+    try {
+      const data = await Room.find().populate("district");
+      return res.status(200).json(data);
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json(err);
+    }
+  }
 }
 
 module.exports = new HotelController();
