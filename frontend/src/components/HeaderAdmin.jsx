@@ -17,12 +17,12 @@ const HeaderAdmin = () => {
             </Link>
           </li>
           <li style={styles.menuItem}>
-            <Link to="/" style={styles.link}>
+            <Link to="/admin-bookings" style={styles.link}>
               Quản lý đặt phòng
             </Link>
           </li>
           <li style={styles.menuItem}>
-            <Link to="/" style={styles.link}>
+            <Link to="/admin-rooms" style={styles.link}>
               Quản lý phòng
             </Link>
           </li>
