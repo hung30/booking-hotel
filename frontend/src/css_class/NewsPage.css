@@ -1,0 +1,120 @@
+.news {
+  font-family: "Roboto", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-image: url("https://ik.imagekit.io/tvlk/image/imageResource/2019/03/13/1552466374013-a57dacdbc92a9c508c1dbc4c4ceeb5cd.jpeg?tr=q-75,w-320");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+header {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  padding: 10px 0;
+  text-align: center;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 10px;
+}
+section {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+.article-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.article {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.article:hover {
+  transform: translateY(-5px);
+}
+.article h2 {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+.article p {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.5;
+  flex-grow: 1;
+  margin-bottom: 0;
+}
+.article img {
+  width: 100%;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+.article a.read-more {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+  align-self: flex-end;
+}
+.article a.read-more:hover {
+  text-decoration: underline;
+}
+.side-article {
+  display: none;
+}
+.side-article img {
+  width: 100%;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+.side-article h2 {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+.side-article p {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.side-article a.read-more {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+.side-article a.read-more:hover {
+  text-decoration: underline;
+}
+#loadMore {
+  text-align: center;
+  margin-top: 20px;
+}
+#loadMore button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#loadMore button:hover {
+  background-color: #0056b3;
+}

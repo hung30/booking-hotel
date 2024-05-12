@@ -1,0 +1,83 @@
+header {
+  background-color: #333;
+  /* Màu nền cho phần header */
+  color: #fff;
+  /* Màu chữ cho phần header */
+  padding: 10px 0;
+  /* Khoảng cách lề trên và dưới cho phần header */
+}
+
+/* Các kiểu cụ thể cho trang chính và trang liên hệ */
+.content {
+  padding: 20px;
+}
+
+/* Các kiểu hình ảnh */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Kiểu cho các bài báo */
+article {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+article h2 {
+  padding: 20px;
+  margin: 0;
+  background-color: #333;
+  color: #fff;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+article p {
+  padding: 20px;
+  margin: 0;
+}
+
+article p:first-of-type {
+  margin-top: 0;
+}
+
+/* Kiểu cho biểu mẫu liên hệ */
+form {
+  max-width: 500px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+form input[type="text"],
+form input[type="email"],
+form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+form textarea {
+  resize: none;
+}
+
+form input[type="submit"]:hover {
+  background-color: #666;
+}

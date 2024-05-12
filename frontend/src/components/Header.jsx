@@ -26,6 +26,8 @@ function Header() {
       ?.split("=")[1];
     if (!tokenCookie) {
       navigate("/login");
+    } else if (tokenCookie === "change-password") {
+      navigate("/forgot-password");
     } else {
       setToken(tokenCookie);
     }
@@ -35,10 +37,8 @@ function Header() {
     if (token) {
       const decodedToken = jwtDecode(token);
       setDecoded(decodedToken);
-      console.log(decodedToken.admin);
     }
   }, [token, navigate]);
-
   return (
     <header className="header">
       <div className="logo">

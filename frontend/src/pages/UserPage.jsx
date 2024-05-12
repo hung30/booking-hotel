@@ -71,7 +71,7 @@ export default function UserPage() {
   });
   useEffect(() => {
     formik.setValues({
-      username: username || "lo",
+      username: username || "",
       email: email || "",
       telephone: telephone || "",
     });

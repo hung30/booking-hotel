@@ -14,6 +14,9 @@ import BookingPage from "./pages/BookingPage";
 import UserPage from "./pages/UserPage";
 import BookingHistory from "./pages/BookingHistory";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
+import NewsPage from "./pages/NewsPage";
+import ContactPage from "./pages/ContactPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 
 function App() {
   const [hotels, setHotels] = useState([]);
@@ -55,12 +58,15 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/khach-san" element={<HotelPage />} />
+            <Route path="/tin-tuc" element={<NewsPage />} />
+            <Route path="/lien-he" element={<ContactPage />} />
             <Route path="/admin-users" element={<AdminUserPage />} />
             <Route path="/admin-rooms" element={<AdminRoomPage />} />
             <Route path="/admin-bookings" element={<BookingPage />} />
             <Route path="/ca-nhan" element={<UserPage />} />
             <Route path="/booking-history" element={<BookingHistory />} />
             <Route path="/change-password" element={<ChangePasswordPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           </Routes>
           <Footer />
         </BrowserRouter>
