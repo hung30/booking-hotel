@@ -27,11 +27,7 @@ function BookingPage() {
   const [refresh, setRefresh] = React.useState(0);
   const [editFormVisible, setEditFormVisible] = React.useState(false);
   const [updateForm] = Form.useForm();
-  const statusOptions = [
-    { value: 'Đang xử lý', label: 'Đang xử lý' },
-    { value: 'Đã đặt', label: 'Đã đặt' },
-    { value: 'Đặt thất bại', label: 'Đặt thất bại' },
-  ];
+  const [status, setStatus] = React.useState([]);
   
 
 
@@ -50,6 +46,12 @@ function BookingPage() {
       setDataBookings(response.data);
     });
   }, [refresh]);
+
+  useEffect(() => {
+    axios.get("/booking/status").then((response) => {
+      setStatus(response.data);
+    });
+  }, [setStatus]);
 
   const columns = [
     {
@@ -190,24 +192,22 @@ function BookingPage() {
   ];
 
   const onUpdateFinish = async (values) => {
-    // console.log(values.data);
-    // console.log(selectedRecord._id);
-    // axios
-    //   .put("/booking/" + selectedRecord._id, {
-    //     status:values.data
-    //   })
-    //   .then((response) => {
-    //     message.success("Cập nhật thành công!");
-    //     updateForm.resetFields();
-    //     setRefresh((f) => f + 1);
-    //     setEditFormVisible(false);
-    //   })
-    //   .catch((err) => {
-    //     message.error("Cập nhật bị lỗi!");
-    //     updateForm.resetFields();
-    //     setRefresh((f) => f + 1);
-    //     setEditFormVisible(false);
-    //   });
+    axios
+      .put("/booking/" + selectedRecord._id, {
+        status:values.status
+      })
+      .then((response) => {
+        message.success("Cập nhật thành công!");
+        updateForm.resetFields();
+        setRefresh((f) => f + 1);
+        setEditFormVisible(false);
+      })
+      .catch((err) => {
+        message.error("Cập nhật bị lỗi!");
+        updateForm.resetFields();
+        setRefresh((f) => f + 1);
+        setEditFormVisible(false);
+      });
   };
 
   const onUpdateFinishFailed = (errors) => {
@@ -253,17 +253,22 @@ function BookingPage() {
         >
          <Form.Item
             label="Trạng thái"
-            name="data"
-            rules={[{ required: true, message: "Chưa chọn trạng thái" }]} // Sửa thông báo
+            name="status"
+            rules={[{ required: true, message: "Chưa chọn trạng thái" }]}
             hasFeedback
             >
-            <Select style={{ width: 200 }}>
-                {statusOptions.map((option) => (
-                <Select.Option key={option.value} value={option.value}>
-                    {option.label}
-                </Select.Option>
-                ))}
-            </Select>
+             <Select
+            style={{ width: 200 }}
+            options={
+              status &&
+              status.map((c) => {
+                return {
+                  value: c._id,
+                  label: c.status,
+                };
+              })
+            }
+          />
             </Form.Item>
         </Form>
       </Modal>
