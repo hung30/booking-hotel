@@ -253,6 +253,7 @@ function AdminRoomPage() {
         </h2>
       {/* FROM INPUT SẢN PHẨM */}
       <Form
+        style={{width:'100%', margin:'0 auto'}}
         form={createForm}
         name="create-form"
         labelCol={{ span: 8 }}
