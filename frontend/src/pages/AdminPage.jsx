@@ -21,7 +21,7 @@ import {
 } from "@ant-design/icons";
 import axios from "axios";
 import HeaderAdmin from "../components/HeaderAdmin";
-import "../css_class/AdminPage.css"
+import "../css_class/AdminPage.css";
 
 function AdminPage() {
   const navigate = useNavigate();
@@ -59,7 +59,6 @@ function AdminPage() {
   useEffect(() => {
     axios.get("/hotel/district").then((response) => {
       setDistrict(response.data);
-      console.log(response.data);
     });
   }, [refresh]);
 
@@ -323,7 +322,6 @@ function AdminPage() {
       <HeaderAdmin />
       {/* FROM INPUT SẢN PHẨM */}
       <Form
-        style={{width:'100%', margin:'0 auto'}}
         form={createForm}
         name="create-form"
         labelCol={{ span: 8 }}

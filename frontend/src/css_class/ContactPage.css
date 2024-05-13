@@ -50,7 +50,7 @@ article p:first-of-type {
 }
 
 /* Kiểu cho biểu mẫu liên hệ */
-form {
+.form-contact {
   max-width: 500px;
   margin: 0 auto;
   background-color: #fff;
@@ -59,14 +59,14 @@ form {
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-form label {
+.form-contact label {
   display: block;
   margin-bottom: 5px;
 }
 
-form input[type="text"],
-form input[type="email"],
-form textarea {
+.form-contact input[type="text"],
+.form-contact input[type="email"],
+.form-contact textarea {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;

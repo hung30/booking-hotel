@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Image,
   Table,
   Button,
   Popconfirm,
@@ -10,19 +9,13 @@ import {
   message,
   Space,
   Modal,
-  InputNumber,
   Select,
-  Upload,
 } from "antd";
-import {
-  DeleteOutlined,
-  PlusOutlined,
-  UploadOutlined,
-} from "@ant-design/icons";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import axios from "axios";
 import HeaderAdmin from "../components/HeaderAdmin";
-import "../css_class/AdminPage.css"
-import numeral from 'numeral';
+import "../css_class/AdminPage.css";
+import numeral from "numeral";
 
 function AdminRoomPage() {
   const navigate = useNavigate();
@@ -35,7 +28,6 @@ function AdminRoomPage() {
 
   const [createForm] = Form.useForm();
   const [addForm] = Form.useForm();
-
 
   useEffect(() => {
     const accessToken = document.cookie
@@ -56,7 +48,6 @@ function AdminRoomPage() {
   useEffect(() => {
     axios.get("/hotel/district").then((response) => {
       setDistrict(response.data);
-  
     });
   }, [refresh]);
 
@@ -107,14 +98,14 @@ function AdminRoomPage() {
       },
     },
     {
-        title: "Giá phòng",
-        dataIndex: "price",
-        key: "price",
-        className: "wrap-text",
-        render: (text) => {
-            return <span>{numeral(text).format('0,0')}VND</span>;
-        },
+      title: "Giá phòng",
+      dataIndex: "price",
+      key: "price",
+      className: "wrap-text",
+      render: (text) => {
+        return <span>{numeral(text).format("0,0")}VND</span>;
       },
+    },
     {
       title: "",
       key: "action",
@@ -170,7 +161,7 @@ function AdminRoomPage() {
               icon={<PlusOutlined />}
               onClick={() => {
                 setSelectedRecord(record);
-         
+
                 getHotelByDistrict(record.district._id);
                 addForm.setFieldsValue(record);
                 setEditFormVisible(true);
@@ -184,16 +175,15 @@ function AdminRoomPage() {
 
   const onFinish = (values) => {
     axios
-      .post("/hotel/new-room",{
-        name:values.name,
-        district:values.district,
-        description:values.description,
-        area:values.area,
-        suitableFor:values.suitableFor,
-        price:values.price,
+      .post("/hotel/new-room", {
+        name: values.name,
+        district: values.district,
+        description: values.description,
+        area: values.area,
+        suitableFor: values.suitableFor,
+        price: values.price,
       })
       .then((response) => {
-   
         message.success("Thêm mới thành công!");
         createForm.resetFields();
         setRefresh((f) => f + 1);
@@ -224,8 +214,8 @@ function AdminRoomPage() {
   // UPDATE DỮ LIỆU
   const onAddFinish = async (values) => {
     axios
-      .put("/hotel/add-room-hotel/"+ selectedRecord._id , {
-        hotel:values.data
+      .put("/hotel/add-room-hotel/" + selectedRecord._id, {
+        hotel: values.data,
       })
       .then((response) => {
         message.success("Thêm phòng cho khách sạn thành công!");
@@ -249,11 +239,10 @@ function AdminRoomPage() {
     <div>
       <HeaderAdmin />
       <h2 className="text-center text-3xl font-normal pb-3 text-red-500">
-          Quản lý phòng
-        </h2>
+        Quản lý phòng
+      </h2>
       {/* FROM INPUT SẢN PHẨM */}
       <Form
-        style={{width:'100%', margin:'0 auto'}}
         form={createForm}
         name="create-form"
         labelCol={{ span: 8 }}
@@ -316,9 +305,7 @@ function AdminRoomPage() {
           rules={[{ required: true, message: "Chưa nhập loại phòng" }]}
           hasFeedback
         >
-          <Input
-            style={{ width: 300, marginLeft: 50 }}
-          />
+          <Input style={{ width: 300, marginLeft: 50 }} />
         </Form.Item>
 
         <Form.Item
@@ -327,9 +314,7 @@ function AdminRoomPage() {
           rules={[{ required: true, message: "Chưa nhập giá phòng" }]}
           hasFeedback
         >
-          <Input
-            style={{ width: 300, marginLeft: 50 }}
-          />
+          <Input style={{ width: 300, marginLeft: 50 }} />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
@@ -370,14 +355,14 @@ function AdminRoomPage() {
           autoComplete="on"
         >
           <Form.Item
-          label="Tên khách sạn"
-          name="data"
-          rules={[{ required: true, message: "Chưa chọn khách sạn" }]}
-          hasFeedback
-        >
-          <Select
-            style={{ width: 200 }}
-            options={
+            label="Tên khách sạn"
+            name="data"
+            rules={[{ required: true, message: "Chưa chọn khách sạn" }]}
+            hasFeedback
+          >
+            <Select
+              style={{ width: 200 }}
+              options={
                 hotels &&
                 hotels.map((c) => {
                   return {
@@ -385,10 +370,9 @@ function AdminRoomPage() {
                     label: c.nameHotel,
                   };
                 })
-            }
-          />
-        </Form.Item>
-
+              }
+            />
+          </Form.Item>
         </Form>
       </Modal>
     </div>

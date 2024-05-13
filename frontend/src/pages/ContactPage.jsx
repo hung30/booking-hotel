@@ -24,7 +24,7 @@ export default function ContactPage() {
             Form liên hệ
           </h2>
         </div>
-        <form>
+        <form className="form-contact">
           <label htmlFor="name">Họ và tên:</label>
           <br />
           <input type="text" id="name" name="name" />

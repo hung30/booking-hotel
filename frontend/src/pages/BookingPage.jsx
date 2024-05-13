@@ -5,20 +5,16 @@ import {
   Button,
   Popconfirm,
   Form,
-  Input,
   message,
   Space,
   Modal,
   Select,
 } from "antd";
-import {
-  DeleteOutlined,
-  EditOutlined,
-} from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import axios from "axios";
 import HeaderAdmin from "../components/HeaderAdmin";
-import "../css_class/BookingPage.css"
-import numeral from 'numeral';
+import "../css_class/BookingPage.css";
+import numeral from "numeral";
 
 function BookingPage() {
   const navigate = useNavigate();
@@ -28,8 +24,6 @@ function BookingPage() {
   const [editFormVisible, setEditFormVisible] = React.useState(false);
   const [updateForm] = Form.useForm();
   const [status, setStatus] = React.useState([]);
-  
-
 
   useEffect(() => {
     const accessToken = document.cookie
@@ -175,8 +169,8 @@ function BookingPage() {
             >
               <Button danger type="dashed" icon={<DeleteOutlined />} />
             </Popconfirm>
-             {/*BUTTON UPDATE DỮ LIỆU */}
-             <Button
+            {/*BUTTON UPDATE DỮ LIỆU */}
+            <Button
               type="dashed"
               icon={<EditOutlined />}
               onClick={() => {
@@ -194,7 +188,7 @@ function BookingPage() {
   const onUpdateFinish = async (values) => {
     axios
       .put("/booking/" + selectedRecord._id, {
-        status:values.status
+        status: values.status,
       })
       .then((response) => {
         message.success("Cập nhật thành công!");
@@ -218,8 +212,8 @@ function BookingPage() {
     <div>
       <HeaderAdmin />
       <h2 className="text-center text-3xl font-normal pb-3 text-red-500">
-          Quản lý đặt phòng
-        </h2>
+        Quản lý đặt phòng
+      </h2>
       <Table
         rowKey="_id"
         dataSource={bookings}
@@ -227,7 +221,7 @@ function BookingPage() {
         pagination={false}
         className="equal-width-columns"
       />
-       <Modal
+      <Modal
         centered
         open={editFormVisible}
         title="Cập nhật thông tin"
@@ -251,25 +245,25 @@ function BookingPage() {
           onFinishFailed={onUpdateFinishFailed}
           autoComplete="on"
         >
-         <Form.Item
+          <Form.Item
             label="Trạng thái"
             name="status"
             rules={[{ required: true, message: "Chưa chọn trạng thái" }]}
             hasFeedback
-            >
-             <Select
-            style={{ width: 200 }}
-            options={
-              status &&
-              status.map((c) => {
-                return {
-                  value: c._id,
-                  label: c.status,
-                };
-              })
-            }
-          />
-            </Form.Item>
+          >
+            <Select
+              style={{ width: 200 }}
+              options={
+                status &&
+                status.map((c) => {
+                  return {
+                    value: c._id,
+                    label: c.status,
+                  };
+                })
+              }
+            />
+          </Form.Item>
         </Form>
       </Modal>
     </div>
