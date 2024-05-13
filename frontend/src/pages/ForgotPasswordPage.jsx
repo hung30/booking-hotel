@@ -33,7 +33,10 @@ export default function ForgotPasswordPage() {
     }),
     onSubmit: async (values) => {
       try {
-        const res = await axios.post("/auth/forgot-password", values);
+        const res = await axios.post(
+          `${process.env.REACT_APP_API_URL}/auth/forgot-password`,
+          values
+        );
         message.success("Đổi mật khẩu thành công");
         document.cookie =
           "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";

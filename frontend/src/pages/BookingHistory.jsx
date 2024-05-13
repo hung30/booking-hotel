@@ -20,7 +20,9 @@ export default function BookingHistory() {
     async function getBooking() {
       try {
         const user = await jwtDecode(getCookie("token"));
-        const res = await axios.get(`/booking/${user.id}`);
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/booking/${user.id}`
+        );
         return res;
       } catch (error) {
         console.error("Error fetching hotel data:", error);
@@ -46,7 +48,9 @@ export default function BookingHistory() {
 
   const handleBooking = async (id) => {
     try {
-      const res = await axios.delete(`/booking/${id}`);
+      const res = await axios.delete(
+        `${process.env.REACT_APP_API_URL}/booking/${id}`
+      );
       message.success("Huỷ đơn đặt thành công");
       setOpen(false);
     } catch (error) {

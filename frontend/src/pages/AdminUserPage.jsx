@@ -21,9 +21,11 @@ export function AdminUserPage() {
   }, [navigate]);
 
   useEffect(() => {
-    axios.get("/user/get-all-user").then((response) => {
-      setUser(response.data);
-    });
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/user/get-all-user`)
+      .then((response) => {
+        setUser(response.data);
+      });
   }, [refresh]);
 
   const columns = [
@@ -87,7 +89,9 @@ export function AdminUserPage() {
                 onConfirm={() => {
                   const id = record._id;
                   axios
-                    .delete("/user/delete-user/" + id)
+                    .delete(
+                      `${process.env.REACT_APP_API_URL}/user/delete-user/` + id
+                    )
                     .then((response) => {
                       message.success("Xóa thành công!");
                       setRefresh((f) => f + 1);
@@ -115,8 +119,8 @@ export function AdminUserPage() {
     <div>
       <HeaderAdmin />
       <h2 className="text-center text-3xl font-normal pb-3 text-red-500">
-          Quản lý người dùng
-        </h2>
+        Quản lý người dùng
+      </h2>
       <Table
         rowKey="_id"
         dataSource={Users}

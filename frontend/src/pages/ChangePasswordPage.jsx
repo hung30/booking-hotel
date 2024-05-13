@@ -15,7 +15,9 @@ export default function ChangePasswordPage() {
   useEffect(() => {
     async function getUser() {
       try {
-        const res = await axios.get("/user/get-user");
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/user/get-user`
+        );
         return res;
       } catch (error) {
         console.error("Error fetching hotel data:", error);
@@ -42,7 +44,7 @@ export default function ChangePasswordPage() {
     onSubmit: async (values) => {
       try {
         const res = await axios.put(
-          `/user/change-password/${user._id}`,
+          `${process.env.REACT_APP_API_URL}/user/change-password/${user._id}`,
           values
         );
         message.success("Đổi mật khẩu thành công");

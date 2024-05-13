@@ -20,7 +20,9 @@ export default function UserPage() {
   useEffect(() => {
     async function getUser() {
       try {
-        const res = await axios.get("/user/get-user");
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/user/get-user`
+        );
         return res;
       } catch (error) {
         console.error("Error fetching hotel data:", error);
@@ -60,7 +62,10 @@ export default function UserPage() {
     }),
     onSubmit: async (values) => {
       try {
-        const res = await axios.put(`/user/update-user/${user._id}`, values);
+        const res = await axios.put(
+          `${process.env.REACT_APP_API_URL}/user/update-user/${user._id}`,
+          values
+        );
         message.success("Sửa thông tin thành công");
         navigate("/");
       } catch (error) {

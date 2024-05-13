@@ -16,7 +16,9 @@ export default function HotelPage() {
   const handleBooking = async (hotelId) => {
     setHideForm(false);
     try {
-      const res = await axios.get(`/hotel/get-one-hotel/${hotelId}`);
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/hotel/get-one-hotel/${hotelId}`
+      );
       setHotel(res.data);
     } catch (error) {
       console.error("Error fetching hotel data:", error);
@@ -45,7 +47,10 @@ export default function HotelPage() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const res = await axios.post(`/booking/${hotel._id}`, data);
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/booking/${hotel._id}`,
+        data
+      );
       setHideForm(true);
       message.success("Đặt phòng khách sạn thành công!");
     } catch (error) {
@@ -57,7 +62,9 @@ export default function HotelPage() {
   const handleSelectRoom = async (e) => {
     setRoomId(e.target.value);
     try {
-      const res = await axios.get(`/hotel/room/${e.target.value}`);
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/hotel/room/${e.target.value}`
+      );
       setRoom(res.data);
     } catch (error) {
       console.error("Error fetching hotel data:", error);

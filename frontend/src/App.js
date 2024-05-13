@@ -24,7 +24,7 @@ function App() {
   useEffect(() => {
     async function getHotel() {
       try {
-        const res = await axios.get("/hotel");
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/hotel`);
         return res;
       } catch (error) {
         console.error("Error fetching hotel data:", error);
@@ -37,7 +37,9 @@ function App() {
 
     async function getDistrict() {
       try {
-        const res = await axios.get("/hotel/district");
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/hotel/district`
+        );
         return res;
       } catch (error) {
         console.error("Error fetching hotel data:", error);

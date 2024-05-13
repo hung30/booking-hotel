@@ -12,7 +12,9 @@ function HomePage() {
 
   const searchHandle = async () => {
     try {
-      const res = await axios.get(`/hotel/get-by-district/${district}`);
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/hotel/get-by-district/${district}`
+      );
       navigate("/khach-san", { state: { districtHotels: res.data } });
     } catch (error) {
       console.error("Error fetching hotel data:", error);

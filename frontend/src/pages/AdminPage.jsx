@@ -50,22 +50,26 @@ function AdminPage() {
   }, [navigate]);
 
   useEffect(() => {
-    axios.get("/hotel").then((response) => {
+    axios.get(`${process.env.REACT_APP_API_URL}/hotel`).then((response) => {
       setHotel(response.data);
       // console.log(response.data);
     });
   }, [refresh]);
 
   useEffect(() => {
-    axios.get("/hotel/district").then((response) => {
-      setDistrict(response.data);
-    });
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/hotel/district`)
+      .then((response) => {
+        setDistrict(response.data);
+      });
   }, [refresh]);
 
   // Hardcoded data for rooms
   const handleDistrictChange = async (id) => {
     try {
-      const res = await axios.get(`/hotel/room-from-district/${id}`);
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/hotel/room-from-district/${id}`
+      );
       setRooms(res.data);
     } catch (error) {
       console.error("Error fetching hotel data:", error);
@@ -201,7 +205,9 @@ function AdminPage() {
               onConfirm={() => {
                 const id = record._id;
                 axios
-                  .delete("/hotel/delete-hotel/" + id)
+                  .delete(
+                    `${process.env.REACT_APP_API_URL}/hotel/delete-hotel/` + id
+                  )
                   .then((response) => {
                     message.success("Xóa thành công!");
                     setRefresh((f) => f + 1);
@@ -249,7 +255,7 @@ function AdminPage() {
 
     // Gửi yêu cầu POST bằng axios
     axios
-      .post("/hotel/new-hotel", data, {
+      .post(`${process.env.REACT_APP_API_URL}/hotel/new-hotel`, data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -297,11 +303,16 @@ function AdminPage() {
       data.append("image", values.image.file);
     }
     axios
-      .put("/hotel/update-hotel/" + selectedRecord._id, data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      .put(
+        `${process.env.REACT_APP_API_URL}/hotel/update-hotel/` +
+          selectedRecord._id,
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
       .then((response) => {
         message.success("Cập nhật thành công!");
         updateForm.resetFields();

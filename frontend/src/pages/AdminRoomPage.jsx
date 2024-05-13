@@ -40,15 +40,19 @@ function AdminRoomPage() {
   }, [navigate]);
 
   useEffect(() => {
-    axios.get("/hotel/all-room").then((response) => {
-      setRooms(response.data);
-    });
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/hotel/all-room`)
+      .then((response) => {
+        setRooms(response.data);
+      });
   }, [refresh]);
 
   useEffect(() => {
-    axios.get("/hotel/district").then((response) => {
-      setDistrict(response.data);
-    });
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/hotel/district`)
+      .then((response) => {
+        setDistrict(response.data);
+      });
   }, [refresh]);
 
   const columns = [
@@ -139,7 +143,9 @@ function AdminRoomPage() {
               onConfirm={() => {
                 const id = record._id;
                 axios
-                  .delete("/hotel/delete-room/" + id)
+                  .delete(
+                    `${process.env.REACT_APP_API_URL}/hotel/delete-room/` + id
+                  )
                   .then((response) => {
                     message.success("Xóa thành công!");
                     setRefresh((f) => f + 1);
@@ -175,7 +181,7 @@ function AdminRoomPage() {
 
   const onFinish = (values) => {
     axios
-      .post("/hotel/new-room", {
+      .post(`${process.env.REACT_APP_API_URL}/hotel/new-room`, {
         name: values.name,
         district: values.district,
         description: values.description,
@@ -201,7 +207,9 @@ function AdminRoomPage() {
 
   const getHotelByDistrict = async (id) => {
     try {
-      const res = await axios.get(`/hotel/get-by-district/${id}`);
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/hotel/get-by-district/${id}`
+      );
       setHotels(res.data.hotels);
     } catch (error) {
       console.error("Error fetching hotel data:", error);
@@ -214,9 +222,13 @@ function AdminRoomPage() {
   // UPDATE DỮ LIỆU
   const onAddFinish = async (values) => {
     axios
-      .put("/hotel/add-room-hotel/" + selectedRecord._id, {
-        hotel: values.data,
-      })
+      .put(
+        `${process.env.REACT_APP_API_URL}/hotel/add-room-hotel/` +
+          selectedRecord._id,
+        {
+          hotel: values.data,
+        }
+      )
       .then((response) => {
         message.success("Thêm phòng cho khách sạn thành công!");
         addForm.resetFields();

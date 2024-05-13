@@ -36,15 +36,19 @@ function BookingPage() {
   }, [navigate]);
 
   useEffect(() => {
-    axios.get("/booking/getAll").then((response) => {
-      setDataBookings(response.data);
-    });
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/booking/getAll`)
+      .then((response) => {
+        setDataBookings(response.data);
+      });
   }, [refresh]);
 
   useEffect(() => {
-    axios.get("/booking/status").then((response) => {
-      setStatus(response.data);
-    });
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/booking/status`)
+      .then((response) => {
+        setStatus(response.data);
+      });
   }, [setStatus]);
 
   const columns = [
@@ -153,7 +157,7 @@ function BookingPage() {
               onConfirm={() => {
                 const id = record._id;
                 axios
-                  .delete("/booking/" + id)
+                  .delete(`${process.env.REACT_APP_API_URL}/booking/` + id)
                   .then((response) => {
                     message.success("Xóa thành công!");
                     setRefresh((f) => f + 1);
@@ -187,7 +191,7 @@ function BookingPage() {
 
   const onUpdateFinish = async (values) => {
     axios
-      .put("/booking/" + selectedRecord._id, {
+      .put(`${process.env.REACT_APP_API_URL}/booking/` + selectedRecord._id, {
         status: values.status,
       })
       .then((response) => {
