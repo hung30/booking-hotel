@@ -20,6 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 const corsOptions = {
   origin: "https://booking-hotel-6568qe85x-hung30s-projects.vercel.app", // Đổi lại thành địa chỉ của trang web của bạn
   credentials: true, // Cho phép gửi cookie
+  allowedHeaders: "*",
 };
 app.use(cors(corsOptions));
 app.use(cookieParser());
