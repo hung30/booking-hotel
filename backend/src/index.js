@@ -21,7 +21,7 @@ const corsOptions = {
   origin: "https://booking-hotel-opal.vercel.app", // Đổi lại thành địa chỉ của trang web của bạn
   methods: ["GET","PUT","POST","DELETE"],
   credentials: true, // Cho phép gửi cookie
-  allowedHeaders: "*",
+  allowedHeaders: "Content-Type",
 };
 app.use(cors(corsOptions));
 app.use(cookieParser());
