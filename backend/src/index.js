@@ -18,7 +18,7 @@ app.use(morgan("combined"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const corsOptions = {
-  origin: "https://booking-hotel-6568qe85x-hung30s-projects.vercel.app", // Đổi lại thành địa chỉ của trang web của bạn
+  origin: "https://booking-hotel-opal.vercel.app", // Đổi lại thành địa chỉ của trang web của bạn
   methods: ["GET","PUT","POST","DELETE"],
   credentials: true, // Cho phép gửi cookie
   allowedHeaders: "*",
