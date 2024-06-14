@@ -59,6 +59,9 @@ class AuthController {
           },
           process.env.JWT_KEY
         );
+        res.cookie('token', token, {
+        maxAge: 24 * 60 * 60 * 1000, // Cookie có hiệu lực trong 24 giờ
+      });
         return res.status(200).json({
           message: "thanh cong",
           token: token,
